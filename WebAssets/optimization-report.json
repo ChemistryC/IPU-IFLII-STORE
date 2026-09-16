@@ -1,0 +1,129 @@
+[
+  {
+    "name": "ApolloStatue.glb",
+    "folder": "Models",
+    "beforeTriangles": 1500636,
+    "afterTriangles": 52730,
+    "beforeBytes": 86293192,
+    "afterBytes": 646864,
+    "animations": 0
+  },
+  {
+    "name": "AthenaStatue.glb",
+    "folder": "Models",
+    "beforeTriangles": 3000636,
+    "afterTriangles": 52732,
+    "beforeBytes": 107772616,
+    "afterBytes": 541476,
+    "animations": 0
+  },
+  {
+    "name": "PegasusStatue.glb",
+    "folder": "Models",
+    "beforeTriangles": 1498840,
+    "afterTriangles": 52458,
+    "beforeBytes": 80917676,
+    "afterBytes": 496956,
+    "animations": 0
+  },
+  {
+    "name": "ATLAS.glb",
+    "folder": "Designs",
+    "beforeTriangles": 20385,
+    "afterTriangles": 20333,
+    "beforeBytes": 1027912,
+    "afterBytes": 545848,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "IPUIFLII.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50404,
+    "afterTriangles": 42484,
+    "beforeBytes": 1599788,
+    "afterBytes": 541028,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "IPUIFLIICLASSIC.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50150,
+    "afterTriangles": 42230,
+    "beforeBytes": 1599472,
+    "afterBytes": 558260,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "IPUIFLIIHERCUES.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50378,
+    "afterTriangles": 42458,
+    "beforeBytes": 1745404,
+    "afterBytes": 689284,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "IPU_IFLII_BLUE.glb",
+    "folder": "Designs",
+    "beforeTriangles": 55460,
+    "afterTriangles": 55460,
+    "beforeBytes": 6850828,
+    "afterBytes": 5715320,
+    "animations": 1,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "PEGASUS.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50268,
+    "afterTriangles": 42348,
+    "beforeBytes": 1921024,
+    "afterBytes": 872108,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "Playyourharp.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50534,
+    "afterTriangles": 42614,
+    "beforeBytes": 1813564,
+    "afterBytes": 747272,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "TIMELESSZIGZAG.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50276,
+    "afterTriangles": 42356,
+    "beforeBytes": 1590740,
+    "afterBytes": 541288,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "TIMELESSZIGZAG2.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50660,
+    "afterTriangles": 42740,
+    "beforeBytes": 1824036,
+    "afterBytes": 749104,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  },
+  {
+    "name": "ZIGZAG.glb",
+    "folder": "Designs",
+    "beforeTriangles": 50264,
+    "afterTriangles": 42344,
+    "beforeBytes": 1582812,
+    "afterBytes": 534156,
+    "animations": 0,
+    "texturePolicy": "Original embedded textures, unchanged"
+  }
+]

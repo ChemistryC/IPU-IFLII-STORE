@@ -1,0 +1,23 @@
+[
+  {
+    "id": "jazz-lounge-pegasus",
+    "title": "Jazz Lounge Pegasus",
+    "video": "WebAssets/Cinema/jazz-lounge-pegasus.mp4",
+    "poster": "WebAssets/Cinema/jazz-lounge-pegasus.jpg",
+    "duration": 156.641814
+  },
+  {
+    "id": "the-brand-of-the-pegasus",
+    "title": "The Brand of The Pegasus - Music",
+    "video": "WebAssets/Cinema/the-brand-of-the-pegasus.mp4",
+    "poster": "WebAssets/Cinema/the-brand-of-the-pegasus.jpg",
+    "duration": 146.912653
+  },
+  {
+    "id": "the-maze",
+    "title": "The Maze",
+    "video": "WebAssets/Cinema/the-maze.mp4",
+    "poster": "WebAssets/Cinema/the-maze.jpg",
+    "duration": 136.301134
+  }
+]

@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><script type="importmap">{"imports":{"three":"./WebAssets/vendor/three/build/three.module.js","three/addons/":"./WebAssets/vendor/three/examples/jsm/"}}</script><script type="module">
+import * as THREE from 'three';import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';import {DRACOLoader} from 'three/addons/loaders/DRACOLoader.js';import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';import {DecalGeometry} from 'three/addons/geometries/DecalGeometry.js';
+const loader=new GLTFLoader().setDRACOLoader(new DRACOLoader().setDecoderPath('./WebAssets/vendor/three/examples/jsm/libs/draco/'));
+const sources={tee:(await loader.loadAsync('./Designs/Heritage/01-ionic-order.glb')).scene,hoodie:(await loader.loadAsync('./WebAssets/Designs/Hoodie-Web.glb')).scene};
+window.bake=async(data)=>{const root=sources[data.kind].clone(true);root.updateMatrixWorld(true);let body;root.traverse(m=>{if(!m.isMesh)return;m.material=m.material.clone();if(!m.name.toLowerCase().includes('conforming')){m.material.color.set(data.fabric==='Ivory'?0xe5dece:0x19212b);body=m;}});const t=await new THREE.TextureLoader().loadAsync(data.image);t.colorSpace=THREE.SRGBColorSpace;
+if(data.kind==='tee'){root.traverse(m=>{if(m.isMesh&&m.name.toLowerCase().includes('conforming')){m.material.map=t;m.material.color.set(0xffffff);m.name='IPU / conforming front print';}})}else{
+ const b=new THREE.Box3().setFromObject(root),s=b.getSize(new THREE.Vector3()),c=b.getCenter(new THREE.Vector3());
+ const geo=new DecalGeometry(body,new THREE.Vector3(c.x,b.min.y+s.y*.62,b.max.z),new THREE.Euler(0,0,0),new THREE.Vector3(s.x*.60,s.y*.42,s.z*.7));
+ const pos=geo.attributes.position,n=geo.attributes.normal;for(let i=0;i<pos.count;i++)pos.setXYZ(i,pos.getX(i)+n.getX(i)*.0007,pos.getY(i)+n.getY(i)*.0007,pos.getZ(i)+n.getZ(i)*.0007);
+ const print=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({map:t,transparent:true,roughness:.95,metalness:0,polygonOffset:true,polygonOffsetFactor:-2,depthWrite:false}));print.name='IPU / conforming front print';root.add(print);
+}
+root.name=data.title;const buf=await new GLTFExporter().parseAsync(root,{binary:true,maxTextureSize:1024});let binary='';const bytes=new Uint8Array(buf);for(let i=0;i<bytes.length;i+=32768)binary+=String.fromCharCode(...bytes.subarray(i,i+32768));return btoa(binary)};window.ready=true;
+</script>

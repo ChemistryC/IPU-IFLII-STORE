@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Timeless / Campaign",
+    "pages": [
+      "WebAssets/Magazines/store-1-01.webp",
+      "WebAssets/Magazines/store-1-02.webp",
+      "WebAssets/Magazines/store-1-03.webp",
+      "WebAssets/Magazines/store-1-04.webp",
+      "WebAssets/Magazines/store-1-05.webp",
+      "WebAssets/Magazines/store-1-06.webp",
+      "WebAssets/Magazines/store-1-07.webp",
+      "WebAssets/Magazines/store-1-08.webp",
+      "WebAssets/Magazines/store-1-09.webp",
+      "WebAssets/Magazines/store-1-10.webp"
+    ],
+    "texts": [
+      "Campaign / 01",
+      "Campaign / 02",
+      "Campaign / 03",
+      "Campaign / 04",
+      "Campaign / 05",
+      "Campaign / 06",
+      "Campaign / 07",
+      "Campaign / 08",
+      "Campaign / 09",
+      "Campaign / 10"
+    ]
+  },
+  {
+    "id": 2,
+    "title": "New Collection / Garments",
+    "pages": [
+      "WebAssets/Magazines/store-2-01.webp",
+      "WebAssets/Magazines/store-2-02.webp",
+      "WebAssets/Magazines/store-2-03.webp",
+      "WebAssets/Magazines/store-2-04.webp",
+      "WebAssets/Magazines/store-2-05.webp",
+      "WebAssets/Magazines/store-2-06.webp",
+      "WebAssets/Magazines/store-2-07.webp",
+      "WebAssets/Magazines/store-2-08.webp",
+      "WebAssets/Magazines/store-2-09.webp",
+      "WebAssets/Magazines/store-2-10.webp"
+    ],
+    "texts": [
+      "Signature",
+      "Triple Pegasus",
+      "Triple Pegasus Ivory",
+      "Timeless",
+      "Pegasus Signature",
+      "Pegasus Signature Ivory",
+      "Pegasus Emblem",
+      "Cobalt Ornament",
+      "Ivory Ornament",
+      "Ivory Ornament"
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Archive / Details",
+    "pages": [
+      "WebAssets/Magazines/store-3-01.webp",
+      "WebAssets/Magazines/store-3-02.webp",
+      "WebAssets/Magazines/store-3-03.webp",
+      "WebAssets/Magazines/store-3-04.webp",
+      "WebAssets/Magazines/store-3-05.webp",
+      "WebAssets/Magazines/store-3-06.webp",
+      "WebAssets/Magazines/store-3-07.webp",
+      "WebAssets/Magazines/store-3-08.webp"
+    ],
+    "texts": [
+      "Archive / 01",
+      "Archive / 02",
+      "Archive / 03",
+      "Archive / 04",
+      "Archive / 05",
+      "Archive / 06",
+      "Archive / 07",
+      "Archive / 08"
+    ]
+  }
+]
