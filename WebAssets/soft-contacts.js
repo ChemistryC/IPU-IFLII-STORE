@@ -15,6 +15,7 @@ export function addSoftContacts(scene, insideY, courtyardY, displays){
  for(const x of [-6.5,6.5])add(x,insideY+.055,52,5.5,5.5);
  add(0,insideY+.06,-101,18,9);for(const x of [-17,17])add(x,insideY+.06,-101,4.8,12);
  add(-39.8,insideY+.06,-99,5.8,15);
+ add(0,courtyardY+.04,128,19,19);
  for(const z of [-124,-131,-138])for(const x of [-16,-10,10,16])add(x,insideY+.055,z,6.4,5.8);
  
  

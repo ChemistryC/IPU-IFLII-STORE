@@ -108,6 +108,10 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         const COURTYARD_Y = 8.8; // Forty 0.4-unit steps reach the existing temple level.
         const insideY = floorY + TEMPLE_RISE;
 
+        // Collision-only guards keep the sides of the staircase safe without adding draw calls.
+        function isStairEdgeBlocked(x,z){
+            return z>=60.7 && z<=109.2 && Math.abs(x)>=35.2 && Math.abs(x)<=36.8;
+        }
         function groundHeightAt(x,z) {
             const halfWidth=z<-20?42:36;
             if(Math.abs(x)<halfWidth && z<=61.2 && z>=-149.7)return insideY;
@@ -3377,7 +3381,32 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             const bounds=new THREE.Box3().setFromObject(object);
             if(!bounds.isEmpty() && bounds.min.z>65 && bounds.max.y<65 && bounds.max.z<220)object.position.y-=floorY-COURTYARD_Y;
         }
-        // The centre promenade stays open; both reflecting pools remain.
+        const fountainGroup=new THREE.Group();fountainGroup.name='Courtyard fountain';fountainGroup.position.set(0,COURTYARD_Y,128);scene.add(fountainGroup);
+        const fountainStone=whiteStoneMat;
+        const fountainWater=new THREE.MeshPhysicalMaterial({color:0x80c8df,roughness:.23,metalness:.15,transparent:true,opacity:.8});
+        function fountainMesh(g,m,y){const o=new THREE.Mesh(g,m);o.position.y=y;fountainGroup.add(o);return o;}
+        fountainMesh(new THREE.CylinderGeometry(7.7,8.2,.5,64),fountainStone,.25);
+        const rim=fountainMesh(new THREE.TorusGeometry(7.3,.42,10,64),fountainStone,.75);rim.rotation.x=Math.PI/2;
+        fountainMesh(new THREE.CylinderGeometry(6.95,6.95,.08,64),fountainWater,.67);
+        fountainMesh(new THREE.CylinderGeometry(.6,1.2,3.5,24),fountainStone,2.05);
+        fountainMesh(new THREE.CylinderGeometry(3,1.2,.5,48),fountainStone,3.85);
+        fountainMesh(new THREE.CylinderGeometry(2.75,2.75,.07,48),fountainWater,4.13);
+        fountainMesh(new THREE.CylinderGeometry(.3,.55,2,24),fountainStone,4.95);
+        fountainMesh(new THREE.CylinderGeometry(1.5,.6,.4,40),fountainStone,6.05);
+        const dropPositions=new Float32Array(360*3);
+        const dropGeometry=new THREE.BufferGeometry();dropGeometry.setAttribute('position',new THREE.BufferAttribute(dropPositions,3));
+        const drops=new THREE.Points(dropGeometry,new THREE.PointsMaterial({color:0xc4f3ff,size:.09,transparent:true,opacity:.8,depthWrite:false}));fountainGroup.add(drops);
+        const basinCollision=new THREE.Mesh(new THREE.CylinderGeometry(7.7,7.7,1.2,24),fountainStone);basinCollision.visible=false;basinCollision.position.y=.6;fountainGroup.add(basinCollision);collisionMeshes.push(basinCollision);
+        let lastFountainFrame=-Infinity;
+        function updateGrandFountain(t){
+            if(t-lastFountainFrame<1/30)return;
+            lastFountainFrame=t;
+            for(let i=0;i<360;i++){const angle=(i%24)/24*Math.PI*2,phase=((i/24)*.067+t*.48)%1;const radius=.25+phase*5.8;dropPositions[i*3]=Math.cos(angle)*radius;dropPositions[i*3+1]=6.3+3.5*phase-9*phase*phase;dropPositions[i*3+2]=Math.sin(angle)*radius;}
+            dropGeometry.attributes.position.needsUpdate=true;
+        }
+
+        drops.geometry.boundingSphere=new THREE.Sphere(new THREE.Vector3(0,3,0),12);
+        updateGrandFountain(0);
 
         addStatueUplight(-6.5,52,6.2);addStatueUplight(6.5,52,6.2);
         // Batch stationary architecture by material and location; keep original collision meshes intact.
@@ -3512,6 +3541,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 groundFogSheet.position.z = camera.position.z;
             }
             atelier?.update(frameDelta);
+            if(camera.position.z>61.2)updateGrandFountain(time*.001);
             const insideTempleNow=isCameraInsideTemple();
             if(insideTempleNow){
                 windAudio.volume=0;poolAudio.volume=0;
@@ -3562,7 +3592,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                     const poolZDistance = Math.max(0, 85 - camera.position.z, camera.position.z - 189);
                     const leftPoolDistance = Math.hypot(Math.max(0, Math.abs(camera.position.x + 41) - 9), poolZDistance);
                     const rightPoolDistance = Math.hypot(Math.max(0, Math.abs(camera.position.x - 41) - 9), poolZDistance);
-                    const nearestPoolDistance = Math.min(leftPoolDistance, rightPoolDistance);
+                    const nearestPoolDistance = Math.min(leftPoolDistance, rightPoolDistance,Math.max(0,Math.hypot(camera.position.x,camera.position.z-128)-7));
                     const poolProximity = THREE.MathUtils.smoothstep(24 - Math.min(24, nearestPoolDistance), 0, 24);
 
                     const inCinema=camera.position.z<-111.5 && Math.abs(camera.position.x)<43;
@@ -3610,6 +3640,8 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 const collidesAtPlayerPosition = () => {
                     const box = getPlayerCollider(camera.position);
                     const x=camera.position.x,z=camera.position.z;
+                    if(isStairEdgeBlocked(x,z))return true;
+                    if(Math.hypot(x,z-128)<8.2)return true;
                     // Full footprints remain solid even when the visible rim is below eye level.
                     if(Math.abs(x)<5.35 && z>-7.5 && z<-2.5)return true;
                     if(z>84.3 && z<189.7 && (Math.abs(x-41)<9.7 || Math.abs(x+41)<9.7))return true;
