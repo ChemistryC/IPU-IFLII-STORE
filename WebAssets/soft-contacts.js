@@ -9,7 +9,7 @@ export function addSoftContacts(scene, insideY, courtyardY, displays){
  const material=new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false,toneMapped:false,polygonOffset:true,polygonOffsetFactor:-1,polygonOffsetUnits:-1});
  const contacts=[];
  const add=(x,y,z,w,d)=>contacts.push([x,y,z,w,d]);
- for(let i=0;i<18;i++){const x=i%2?-29:29,z=-25-Math.floor(i/2)*7;add(x,insideY+.055,z,7.2,7.2);add(x,insideY+.73,z,3.6,2.8);}
+ for(const display of scene.userData.galleryDisplays||[]){const {x,z}=display.position;add(x,insideY+.055,z,7.2,7.2);add(x,insideY+.73,z,3.6,2.8);}
  for(const slot of displays){const p=slot.group?.position;if(p)add(p.x,insideY+.055,p.z,6.8,6.8);}
  add(0,insideY+.055,-5,13,7);add(0,insideY+.055,-15,7,7);
  for(const x of [-6.5,6.5])add(x,insideY+.055,52,5.5,5.5);

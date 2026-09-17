@@ -47,7 +47,7 @@ export async function createAtelier(ctx) {
 
   const fill=new THREE.PointLight(0xffffff,360,44,2);fill.position.set(-8,insideY+12,-40);scene.add(fill);
   const spots=[];for(const x of [-20,20]){const l=new THREE.SpotLight(0xfff6e8,0,20,.68,.85,1.5);l.position.set(x,insideY+8.4,-25);l.target.position.set(x,insideY+3.3,-25);scene.add(l.target);spots.push(l);}
-  const meshModels=[];let loaded=0;const failures=[];
+  const meshModels=[];scene.userData.galleryDisplays=meshModels;let loaded=0;const failures=[];
   // One shared geometry load; each display has its own lightweight print texture.
   // Standalone GLBs remain available for download without loading all of them into the scene.
   const sources={};
@@ -57,7 +57,10 @@ export async function createAtelier(ctx) {
   for(let i=0;i<garments.length;i++){
     const data=garments[i],x=i%2?-29:29,z=-25-Math.floor(i/2)*10;
     box(4.5,.65,4.5,x,.325,z,cream,true);box(4.6,.055,4.6,x,.69,z,brass);
-    box(4.8,.10,4.8,x,8.6,z,stone);box(3.8,.03,.13,x,8.53,z+.9,glow);
+    box(4.8,.10,4.8,x,8.6,z,stone);
+    const lampMaterial=new THREE.MeshStandardMaterial({color:0xfff3df,emissive:0xfff3df,emissiveIntensity:.04,roughness:.4});
+    const lamp=box(3.8,.03,.13,x,8.53,z+.9,lampMaterial);
+    ctx.registerShowcase({group:{position:new THREE.Vector3(x,insideY,z)},lamp,lightHeight:8.5,targetHeight:3.8,proximityAmount:0,lightAmount:0});
     const caption=label(data.title,x,.38,z+2.30,Math.min(3.5,data.title.length*.15),'#34434d');
     caption.userData={atelierAction:()=>openGarment(data)};interactableModels.push(caption);
     try{

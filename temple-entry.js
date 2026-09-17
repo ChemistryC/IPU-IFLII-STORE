@@ -2560,6 +2560,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         }
 
         const shirtDisplaySlots = [];
+        const galleryShowcaseSlots = [];
 
         // All garment displays use the same cinematic aperture-bloom cue.
         const SHOWCASE_LIGHT_CUES = [
@@ -2756,7 +2757,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         });
         function updateShowcaseLights(time,delta){
             const nearby=[];
-            for(const slot of shirtDisplaySlots){
+            for(const slot of [...shirtDisplaySlots,...galleryShowcaseSlots]){
                 const dx=camera.position.x-slot.group.position.x,dz=camera.position.z-slot.group.position.z;
                 const facing=slot.group.position.x<0?dx>0:dx<0;
                 const distance=Math.hypot(dx,dz);
@@ -2771,8 +2772,9 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 const selected=nearby[i];
                 if(!selected){light.intensity=0;return;}
                 const slot=selected.slot,amount=slot.proximityAmount*slot.proximityAmount*(3-2*slot.proximityAmount);
-                light.position.set(slot.group.position.x,insideY+5.63,slot.group.position.z);
-                light.target.position.set(slot.group.position.x,insideY+2.8,slot.group.position.z);
+                light.position.set(slot.group.position.x,insideY+(slot.lightHeight||5.63),slot.group.position.z);
+                light.distance=slot.lightHeight?10:7;
+                light.target.position.set(slot.group.position.x,insideY+(slot.targetHeight||2.8),slot.group.position.z);
                 light.angle=THREE.MathUtils.lerp(.045,.70,amount);
                 light.penumbra=THREE.MathUtils.lerp(.9,.55,amount);
                 light.intensity=46*amount;
@@ -3383,19 +3385,24 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         }
         const fountainGroup=new THREE.Group();fountainGroup.name='Courtyard fountain';fountainGroup.position.set(0,COURTYARD_Y,128);scene.add(fountainGroup);
         const fountainStone=whiteStoneMat;
-        const fountainWater=new THREE.MeshPhysicalMaterial({color:0x80c8df,roughness:.23,metalness:.15,transparent:true,opacity:.8});
+        const fountainWater=waterMat;
         function fountainMesh(g,m,y){const o=new THREE.Mesh(g,m);o.position.y=y;fountainGroup.add(o);return o;}
         fountainMesh(new THREE.CylinderGeometry(7.7,8.2,.5,64),fountainStone,.25);
         const rim=fountainMesh(new THREE.TorusGeometry(7.3,.42,10,64),fountainStone,.75);rim.rotation.x=Math.PI/2;
-        fountainMesh(new THREE.CylinderGeometry(6.95,6.95,.08,64),fountainWater,.67);
+        const lowerWater=fountainMesh(new THREE.RingGeometry(1.1,6.95,64,12),fountainWater,.71);lowerWater.rotation.x=-Math.PI/2;lowerWater.name='Fountain lower water';
         fountainMesh(new THREE.CylinderGeometry(.6,1.2,3.5,24),fountainStone,2.05);
         fountainMesh(new THREE.CylinderGeometry(3,1.2,.5,48),fountainStone,3.85);
-        fountainMesh(new THREE.CylinderGeometry(2.75,2.75,.07,48),fountainWater,4.13);
+        const upperWater=fountainMesh(new THREE.RingGeometry(.5,2.75,48,8),fountainWater,4.17);upperWater.rotation.x=-Math.PI/2;upperWater.name='Fountain upper water';
         fountainMesh(new THREE.CylinderGeometry(.3,.55,2,24),fountainStone,4.95);
         fountainMesh(new THREE.CylinderGeometry(1.5,.6,.4,40),fountainStone,6.05);
         const dropPositions=new Float32Array(360*3);
         const dropGeometry=new THREE.BufferGeometry();dropGeometry.setAttribute('position',new THREE.BufferAttribute(dropPositions,3));
-        const drops=new THREE.Points(dropGeometry,new THREE.PointsMaterial({color:0xc4f3ff,size:.09,transparent:true,opacity:.8,depthWrite:false}));fountainGroup.add(drops);
+        const dropCanvas=document.createElement('canvas');dropCanvas.width=32;dropCanvas.height=32;
+        const dropContext=dropCanvas.getContext('2d'),dropGradient=dropContext.createRadialGradient(16,16,7,16,16,15);
+        dropGradient.addColorStop(0,'rgba(255,255,255,1)');dropGradient.addColorStop(.75,'rgba(255,255,255,.9)');dropGradient.addColorStop(1,'rgba(255,255,255,0)');
+        dropContext.fillStyle=dropGradient;dropContext.fillRect(0,0,32,32);
+        const dropTexture=new THREE.CanvasTexture(dropCanvas);
+        const drops=new THREE.Points(dropGeometry,new THREE.PointsMaterial({map:dropTexture,color:0xc4f3ff,size:.09,transparent:true,opacity:.8,alphaTest:.05,depthWrite:false}));drops.name='Round fountain droplets';fountainGroup.add(drops);
         const basinCollision=new THREE.Mesh(new THREE.CylinderGeometry(7.7,7.7,1.2,24),fountainStone);basinCollision.visible=false;basinCollision.position.y=.6;fountainGroup.add(basinCollision);collisionMeshes.push(basinCollision);
         let lastFountainFrame=-Infinity;
         function updateGrandFountain(t){
@@ -3954,7 +3961,7 @@ const StoreCore = (() => {
         const beatController=createBeatController(scene,()=>audioCtx,musicAudio);
         let atelier=null;
         const atelierReady=Promise.resolve().then(()=>createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
-          registerProduct(data){},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
+          registerShowcase(slot){galleryShowcaseSlots.push(slot);},registerProduct(data){},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
           isScenePaused:()=>isPaused,cinemaCursor(active){scene.userData.cinemaCursor=active;},
           setModal(open){isCatalogOpen=open;isPaused=open;stopPlayerMomentum();hideMovePrompt();if(open)controls.unlock();},
           travel(position,target){initAudio();if(audioCtx?.state==='suspended')audioCtx.resume();isPaused=false;isCatalogOpen=false;isReceptionOpen=false;stopPlayerMomentum();pauseMenu?.classList.remove('visible');if(blocker)blocker.style.display='none';hideMovePrompt();camera.position.fromArray(position);camera.lookAt(...target);document.body.classList.add('game-active');if(!isTouchMode)safeLockControls();}
