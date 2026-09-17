@@ -17,7 +17,7 @@ export function addSoftContacts(scene, insideY, courtyardY, displays){
  add(-39.8,insideY+.06,-99,5.8,15);
  for(const z of [-124,-131,-138])for(const x of [-16,-10,10,16])add(x,insideY+.055,z,6.4,5.8);
  
- add(0,courtyardY+.04,128,19,19);
+ 
  for(const x of [-28,28])for(const z of [-4.5,8,20.5,33,45.5])add(x,insideY+.055,z,5.5,5.5);
  const geometry=new THREE.PlaneGeometry(1,1);geometry.rotateX(-Math.PI/2);
  const mesh=new THREE.InstancedMesh(geometry,material,contacts.length);mesh.name='Subtle contact shadows';mesh.renderOrder=2;

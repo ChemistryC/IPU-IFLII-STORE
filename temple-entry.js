@@ -1355,7 +1355,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
 
         function openProductPanel(data) {
             const key=Object.keys(PRODUCTS_BY_MODEL).find(k=>PRODUCTS_BY_MODEL[k]===data || PRODUCTS_BY_MODEL[k].title===data.title);
-            openTempleProduct({...data,key:key || data.title,file:key,images:[data.img].filter(Boolean)});
+            openTempleProduct({...data,key:key || data.title,file:data.file || key,images:[data.img].filter(Boolean)});
         }
 
         const raycaster = new THREE.Raycaster();
@@ -2458,79 +2458,87 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         const CDN = "https://ipuiflii.com/cdn/shop/files/";
 
         const PRODUCTS_BY_MODEL = {
-            "atlas.glb": {
-                title: "IPU IFLII All Fine Design",
-                price: "",
-                img: CDN + "unisex-classic-tee-black-front-6a7d0100a9794.png?v=1786577172&width=832",
-                url: "https://ipuiflii.com/products/ipu-iflii-logo-tee",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "pegasus.glb": {
-                title: "Timeless Pegasus",
-                price: "",
-                img: CDN + "unisex-classic-tee-white-front-6a7d03d31a42b.jpg?v=1786577896&width=832",
-                url: "https://ipuiflii.com/products/ipu-iflii-pegasus-hoodie",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "timelesszigzag.glb": {
-                title: "Timeless — Zig Zag",
-                price: "",
-                img: CDN + "unisex-classic-tee-white-front-6a7d04a9772a4.jpg?v=1786578111&width=832",
-                url: "https://ipuiflii.com/products/zig-zag-t-shirt",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "zigzag.glb": {
-                title: "IPU IFLII Zig Zag Logo",
-                price: "",
-                img: CDN + "unisex-classic-tee-maroon-front-6a754f16a5202.png?v=1786072877&width=3840",
-                url: "https://ipuiflii.com/products/zig-zag-logo-t-shirt",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            // Zig-zag emblem: no photo yet, so the panel opens without a
-            // gallery and sends people to the full collection.
-            "timelesszigzag2.glb": {
-                title: "IPU IFLII Zig-Zag Emblem",
-                price: "",
-                img: "",
-                url: "https://ipuiflii.com/collections/all",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "ipuiflii.glb": {
-                title: "The Unique IFLII",
-                price: "",
-                img: CDN + "unisex-classic-tee-white-front-6a7d0384b66ee.png?v=1786577815&width=832",
-                url: "https://ipuiflii.com/products/ipu-iflii",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "ipuifliiclassic.glb": {
-                title: "IPU IFLII Classic",
-                price: "",
-                img: CDN + "unisex-classic-tee-white-front-6a7d06da29254.jpg?v=1786578670&width=832",
-                url: "https://ipuiflii.com/products/ipu-iflii-logo-center",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "playyourharp.glb": {
-                title: "Just Play Your Harp",
-                price: "",
-                img: CDN + "unisex-classic-tee-white-front-6a7550c20ce4d.png?v=1786073306&width=832",
-                url: "https://ipuiflii.com/products/just-play-your-harp?variant=58786201993561",
-                description: CLASSIC_TEE_DESCRIPTION
-            },
-            "ipuifliihercues.glb": {
-                title: "Oversized IPU IFLII T-Shirt",
-                price: "",
-                img: CDN + "mens-oversized-faded-t-shirt-faded-black-front-6a75509c8c943.png?v=1786073264&width=832",
-                url: "https://ipuiflii.com/products/ipu-iflii-logo-t-shirt",
-                description: OVERSIZED_TEE_DESCRIPTION
-            },
-            "ipu_iflii_blue.glb": {
-                title: "IPU IFLII Blue",
-                price: "",
-                img: "",
-                url: "https://ipuiflii.com/collections/all",
-                description: COMING_SOON_DESCRIPTION
-            }
-        };
+    "pegasus.glb": {
+        "title": "Timeless Pegasus Tee",
+        "price": "",
+        "img": "WebAssets/Shop/timeless-pegasus-tee.webp",
+        "url": "https://ipuiflii.com/products/timeless-pegasus-tee",
+        "description": "",
+        "file": "PEGASUS.glb"
+    },
+    "playyourharp.glb": {
+        "title": "Just Play Your Harp",
+        "price": "",
+        "img": "WebAssets/Shop/just-play-your-harp.webp",
+        "url": "https://ipuiflii.com/products/just-play-your-harp",
+        "description": "",
+        "file": "Playyourharp.glb"
+    },
+    "timelesszigzag.glb": {
+        "title": "Timeless \u2014 Zig Zag",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "TIMELESSZIGZAG.glb"
+    },
+    "timelesszigzag2.glb": {
+        "title": "Timeless \u2014 Zig Zag Black",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "TIMELESSZIGZAG2.glb"
+    },
+    "zigzag.glb": {
+        "title": "Zig Zag",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "ZIGZAG.glb"
+    },
+    "atlas.glb": {
+        "title": "Atlas T-shirt",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "ATLAS.glb"
+    },
+    "ipuiflii.glb": {
+        "title": "IPU IFLII",
+        "price": "",
+        "img": "WebAssets/Shop/ipu-iflii.webp",
+        "url": "https://ipuiflii.com/products/ipu-iflii",
+        "description": "",
+        "file": "IPUIFLII.glb"
+    },
+    "ipuifliiclassic.glb": {
+        "title": "IPU IFLII Classic",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "IPUIFLIICLASSIC.glb"
+    },
+    "ipuifliihercues.glb": {
+        "title": "Hercules Fights Lion",
+        "price": "",
+        "img": "WebAssets/Shop/hercules-fights-lion.webp",
+        "url": "https://ipuiflii.com/products/hercules-fights-lion",
+        "description": "",
+        "file": "IPUIFLIIHERCUES.glb"
+    },
+    "ipu_iflii_blue.glb": {
+        "title": "IPU IFLII Blue",
+        "price": "",
+        "img": "",
+        "url": "https://ipuiflii.com/",
+        "description": "",
+        "file": "IPU_IFLII_BLUE.glb"
+    }
+};
 
         const FALLBACK_PRODUCT = {
             title: "IPU IFLII",
@@ -2555,13 +2563,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         let showcaseTestStartedAt = 0;
 
         // Each entry pairs with SHIRT_MODEL_FILES at the same index.
-        const modelPositions = [
-            { x: -18.5, z: 40 }, { x: 18.5, z: 40 },
-            { x: -18.5, z: 31 }, { x: 18.5, z: 31 },
-            { x: -18.5, z: 22 }, { x: 18.5, z: 22 },
-            { x: -18.5, z: 13 }, { x: 18.5, z: 13 },
-            { x: -18.5, z: 4 }, { x: 18.5, z: 4 }
-        ];
+        const modelPositions = [-18.5,18.5].flatMap(x=>[40,31,22,13,4].map(z=>({x,z})));
 
         const showcaseGlassMat = new THREE.MeshPhysicalMaterial({
             color: 0xf4fbff,
@@ -3372,26 +3374,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             const bounds=new THREE.Box3().setFromObject(object);
             if(!bounds.isEmpty() && bounds.min.z>65 && bounds.max.y<65 && bounds.max.z<220)object.position.y-=floorY-COURTYARD_Y;
         }
-        const fountainGroup=new THREE.Group();fountainGroup.name='Courtyard fountain';fountainGroup.position.set(0,COURTYARD_Y,128);scene.add(fountainGroup);
-        const fountainStone=whiteStoneMat;
-        const fountainWater=new THREE.MeshPhysicalMaterial({color:0x80c8df,roughness:.23,metalness:.15,transparent:true,opacity:.8});
-        function fountainMesh(g,m,y){const o=new THREE.Mesh(g,m);o.position.y=y;fountainGroup.add(o);return o;}
-        fountainMesh(new THREE.CylinderGeometry(7.7,8.2,.5,64),fountainStone,.25);
-        const rim=fountainMesh(new THREE.TorusGeometry(7.3,.42,10,64),fountainStone,.75);rim.rotation.x=Math.PI/2;
-        fountainMesh(new THREE.CylinderGeometry(6.95,6.95,.08,64),fountainWater,.67);
-        fountainMesh(new THREE.CylinderGeometry(.6,1.2,3.5,24),fountainStone,2.05);
-        fountainMesh(new THREE.CylinderGeometry(3,1.2,.5,48),fountainStone,3.85);
-        fountainMesh(new THREE.CylinderGeometry(2.75,2.75,.07,48),fountainWater,4.13);
-        fountainMesh(new THREE.CylinderGeometry(.3,.55,2,24),fountainStone,4.95);
-        fountainMesh(new THREE.CylinderGeometry(1.5,.6,.4,40),fountainStone,6.05);
-        const dropPositions=new Float32Array(360*3);
-        const dropGeometry=new THREE.BufferGeometry();dropGeometry.setAttribute('position',new THREE.BufferAttribute(dropPositions,3));
-        const drops=new THREE.Points(dropGeometry,new THREE.PointsMaterial({color:0xc4f3ff,size:.09,transparent:true,opacity:.8,depthWrite:false}));fountainGroup.add(drops);
-        const basinCollision=new THREE.Mesh(new THREE.CylinderGeometry(7.7,7.7,1.2,24),fountainStone);basinCollision.visible=false;basinCollision.position.y=.6;fountainGroup.add(basinCollision);collisionMeshes.push(basinCollision);
-        function updateGrandFountain(t){
-            for(let i=0;i<360;i++){const angle=(i%24)/24*Math.PI*2,phase=((i/24)*.067+t*.48)%1;const radius=.25+phase*5.8;dropPositions[i*3]=Math.cos(angle)*radius;dropPositions[i*3+1]=6.3+3.5*phase-9*phase*phase;dropPositions[i*3+2]=Math.sin(angle)*radius;}
-            dropGeometry.attributes.position.needsUpdate=true;
-        }
+        // The centre promenade stays open; both reflecting pools remain.
 
         addStatueUplight(-6.5,52,6.2);addStatueUplight(6.5,52,6.2);
         // Batch stationary architecture by material and location; keep original collision meshes intact.
@@ -3526,7 +3509,6 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 groundFogSheet.position.z = camera.position.z;
             }
             atelier?.update(frameDelta);
-            updateGrandFountain(time*.001);
             const insideTempleNow=isCameraInsideTemple();
             if(insideTempleNow){
                 windAudio.volume=0;poolAudio.volume=0;
@@ -3577,7 +3559,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                     const poolZDistance = Math.max(0, 85 - camera.position.z, camera.position.z - 189);
                     const leftPoolDistance = Math.hypot(Math.max(0, Math.abs(camera.position.x + 41) - 9), poolZDistance);
                     const rightPoolDistance = Math.hypot(Math.max(0, Math.abs(camera.position.x - 41) - 9), poolZDistance);
-                    const nearestPoolDistance = Math.min(leftPoolDistance, rightPoolDistance,Math.max(0,Math.hypot(camera.position.x,camera.position.z-128)-7));
+                    const nearestPoolDistance = Math.min(leftPoolDistance, rightPoolDistance);
                     const poolProximity = THREE.MathUtils.smoothstep(24 - Math.min(24, nearestPoolDistance), 0, 24);
 
                     const inCinema=camera.position.z<-111.5 && Math.abs(camera.position.x)<43;
@@ -3628,7 +3610,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                     // Full footprints remain solid even when the visible rim is below eye level.
                     if(Math.abs(x)<5.35 && z>-7.5 && z<-2.5)return true;
                     if(z>84.3 && z<189.7 && (Math.abs(x-41)<9.7 || Math.abs(x+41)<9.7))return true;
-                    if(Math.hypot(x,z-128)<8.2)return true;
+
                     for(const door of scene.userData.cinemaDoorBoxes||[])if(box.intersectsBox(door))return true;
                     for (const obstacle of collidableBoxes) {
                         if (box.intersectsBox(obstacle)) return true;
@@ -3734,11 +3716,11 @@ const StoreCore = (() => {
 
         // ---- One catalogue for the walk-through, reception and 2D shop ----
         const storeProducts = currentCatalog;
-        for(const [file,data] of Object.entries(PRODUCTS_BY_MODEL)){data.price='';const product=storeProducts.find(p=>p.url===data.url);if(product)product.file=file;}
+        for(const [file,data] of Object.entries(PRODUCTS_BY_MODEL)){data.price='';const product=storeProducts.find(p=>p.url===data.url);if(product)product.file=data.file || file;}
         function openTempleProduct(data){
             const linked=storeProducts.find(p=>p.url===data.url);
             const key=data.id || data.key || data.title;
-            const p={...linked,...data,key,images:linked?.images?.length?linked.images:(data.images||[data.image].filter(Boolean)),description:data.description||'',options:[],variants:[]};
+            const p={...linked,...data,key,images:data.images || [],thumbnail:storeProductMap.get(key)?.thumbnail || null,description:'',options:[],variants:[]};
             storeProductMap.set(key,p);openPauseMenu();openStoreProduct(key);
         }
         const storeProductMap = new Map(storeProducts.map(p=>[p.key,p]));
@@ -3777,7 +3759,7 @@ const StoreCore = (() => {
         }
 
         function showStore(view='browse',focus=true) {
-            disposeProductViewer(); productLoadSequence++; storeView=view;
+            disposeProductViewer(); productLoadSequence++; storeView=view;document.querySelector('.store-shell').classList.remove('product-view');
             document.querySelector('.store-shell').scrollTop=0;
             document.querySelectorAll('[data-store-view]').forEach(el=>el.setAttribute('aria-current',String(el.dataset.storeView===view)));
             if(view==='graphics') renderGraphics(); else if(view==='bag') renderStoreBrowse(); else if(view==='reception') renderStoreReception(); else if(view==='lookbook') renderLookbook(); else renderStoreBrowse();
@@ -3815,21 +3797,21 @@ const StoreCore = (() => {
         async function openStoreProduct(key) {
             const p=storeProductMap.get(key);if(!p)return;
             document.querySelector('.store-shell').scrollTop=0;
-            disposeProductViewer();storeView='product';activeStoreProduct=p;++productLoadSequence;
-            storeContent.innerHTML=`<button class="store-link" data-store-view="browse">← Back to collection</button><div class="store-detail"><div><div class="product-media" id="product-media"></div><div class="media-actions"><button type="button" id="show-product-photo" class="selected">Images</button>${p.file||p.model||p.previewScene?'<button type="button" id="show-product-3d">View in 3D</button>':''}</div><div class="media-thumbs" id="product-thumbnails"></div><p class="store-note" id="product-media-note"></p></div><div class="product-info"><p class="store-kicker">IPU IFLII · Timeless</p><h1 tabindex="-1">${escHTML(p.title)}</h1><a class="store-primary" id="store-buy" href="https://ipuiflii.com/">Buy on IPUIFLII.com ↗</a><p class="store-note">Choose your size and colour in the store.</p>${p.description?`<details open><summary>About this piece</summary>${p.description}</details>`:''}</div></div>`;
-            showProductImage(p);renderProductThumbnails(p);
+            disposeProductViewer();storeView='product';activeStoreProduct=p;++productLoadSequence;document.querySelector('.store-shell').classList.add('product-view');
+            storeContent.innerHTML=`<button class="store-link" data-store-view="browse">← Back to collection</button><div class="store-detail"><div><div class="product-media" id="product-media"></div><div class="media-actions"><button type="button" id="show-product-photo" class="selected">Images</button>${p.file||p.model||p.previewScene?'<button type="button" id="show-product-3d">View in 3D</button>':''}</div><div class="media-thumbs" id="product-thumbnails"></div><p class="store-note" id="product-media-note"></p></div><div class="product-info"><h1 tabindex="-1">${escHTML(p.title)}</h1><a class="store-primary" id="store-buy" href="https://ipuiflii.com/">Buy ↗</a></div></div>`;
+            showProductImage(p);renderProductThumbnails(p);if(!p.images.length&&!p.thumbnail){const cached=p.previewScene?{scene:p.previewScene,animations:[]}:webModelCache.get((p.file||p.key).toLowerCase());if(cached)queueModelThumbnail(p.key,cached);else startProductViewer(p);}
             document.getElementById('show-product-photo').onclick=()=>showProductImage(p);
             const viewButton=document.getElementById('show-product-3d');if(viewButton)viewButton.onclick=()=>startProductViewer(p);
             storeContent.querySelector('h1').focus({preventScroll:true});
         }
-        function renderProductThumbnails(p){const el=document.getElementById('product-thumbnails');if(!el)return;el.innerHTML=p.images.map((src,i)=>`<button type="button" data-gallery-index="${i}" aria-label="Product image ${i+1}"><img src="${escHTML(src)}" alt="${escHTML(p.title)} — view ${i+1}" loading="lazy"></button>`).join('');}
+        function renderProductThumbnails(p){const el=document.getElementById('product-thumbnails');if(!el)return;el.innerHTML=(p.images.length>1?p.images:[]).map((src,i)=>`<button type="button" data-gallery-index="${i}" aria-label="Product image ${i+1}"><img src="${escHTML(src)}" alt="${escHTML(p.title)} — view ${i+1}" loading="lazy"></button>`).join('');}
         function showProductImage(p,index=0){
             disposeProductViewer();++productLoadSequence;const el=document.getElementById('product-media');if(!el)return;
             const src=!p.imageFailed&&p.images[index]?p.images[index]:p.thumbnail;
             el.innerHTML=src?`<img src="${escHTML(src)}" alt="${escHTML(p.title)}" id="detail-image">`:'<p class="store-note">Preparing your garment preview…</p>';
             const img=el.querySelector('img');if(img)img.onerror=()=>{if(p.thumbnail&&img.src!==p.thumbnail){img.src=p.thumbnail;p.imageFailed=true;}else{el.innerHTML='<p class="store-note">Select View in 3D to explore this piece.</p>';}};
             document.getElementById('show-product-photo')?.classList.add('selected');document.getElementById('show-product-3d')?.classList.remove('selected');
-            const note=document.getElementById('product-media-note');if(note)note.textContent=p.imageFailed||!p.images.length?'Preview of your actual 3D garment.':'Browse every available product photo, including on-body photos when supplied by the store.';
+            const note=document.getElementById('product-media-note');if(note)note.textContent='';
         }
         function addActiveProductToBag(){
             const p=activeStoreProduct;const error=document.getElementById('detail-error');
@@ -3861,7 +3843,7 @@ const StoreCore = (() => {
             finally{if(button.isConnected){button.disabled=false;button.textContent='Continue to secure checkout ↗';}}
         }
         function renderStoreReception(){
-            storeContent.innerHTML=`<p class="store-kicker">At your service</p><h1 tabindex="-1">Welcome to reception.</h1><div class="reception-layout"><section class="reception-welcome"><h2>Find something that feels like you.</h2><p>Explore the collection, inspect a garment in 3D, or return to the marble hall. Buy your favourite piece on IPUIFLII.com.</p><label class="store-search"><input id="reception-search" type="search" placeholder="Search garments…" aria-label="Search from reception"></label><button class="store-primary" id="reception-find" style="margin-top:12px">Find a piece</button><button class="store-secondary" id="visit-reception-3d">Visit reception in 3D ↗</button></section><section class="reception-faq"><details open><summary>Choosing your size</summary><p>Open a piece to choose its size and colour. The available options come from its store listing. Exact measurements are linked from each product’s size guide.</p></details><details><summary>How purchasing works</summary><p>Open a product preview and select Buy to visit IPUIFLII.com and complete your order.</p></details><details><summary>Product &amp; on-body imagery</summary><p>Every product gallery includes the photographs available from the store. You can also rotate and zoom the actual 3D garment.</p></details><details><summary>Music in the temple</summary><p>Your Timeless music and the fountain and wind sounds play after you enter. You can mute or resume the music below.</p></details><details><summary>Contact the store</summary><p>For custom pieces, sizing assistance or an existing order, visit <a href="${STORE_URL}" target="_blank" rel="noopener">IPU IFLII ↗</a>.</p></details></section></div>`;
+            storeContent.innerHTML=`<p class="store-kicker">At your service</p><h1 tabindex="-1">Welcome to reception.</h1><div class="reception-layout"><section class="reception-welcome"><h2>Find something that feels like you.</h2><p>Explore the collection, inspect a garment in 3D, or return to the marble hall. Buy your favourite piece on IPUIFLII.com.</p><label class="store-search"><input id="reception-search" type="search" placeholder="Search garments…" aria-label="Search from reception"></label><button class="store-primary" id="reception-find" style="margin-top:12px">Find a piece</button><button class="store-secondary" id="visit-reception-3d">Visit reception in 3D ↗</button></section><section class="reception-faq"><details open><summary>Choosing your size</summary><p>Open a piece to choose its size and colour. The available options come from its store listing. Exact measurements are linked from each product’s size guide.</p></details><details><summary>How purchasing works</summary><p>Open a product preview and select Buy to visit IPUIFLII.com and complete your order.</p></details><details><summary>Product &amp; on-body imagery</summary><p>Every product gallery includes the photographs available from the store. You can also rotate and zoom the actual 3D garment.</p></details><details><summary>Music in the temple</summary><p>Your Timeless music and the pool and wind sounds play after you enter. You can mute or resume the music below.</p></details><details><summary>Contact the store</summary><p>For custom pieces, sizing assistance or an existing order, visit <a href="${STORE_URL}" target="_blank" rel="noopener">IPU IFLII ↗</a>.</p></details></section></div>`;
             const search=()=>{storeQuery=document.getElementById('reception-search').value;showStore('browse');};document.getElementById('reception-find').onclick=search;document.getElementById('reception-search').onkeydown=e=>{if(e.key==='Enter')search();};
         }
         const lookNames=['Midnight blue','Emerald','Everyday green','Champagne','In motion','Up close'];
@@ -3917,8 +3899,8 @@ const StoreCore = (() => {
         }
         async function startProductViewer(p){
             disposeProductViewer();const sequence=++productLoadSequence;const container=document.getElementById('product-media');container.innerHTML='<p class="store-note">Loading your 3D garment…</p>';
-            let gltf=p.previewScene?{scene:p.previewScene,animations:[]}:webModelCache.get(p.file||p.key);
-            try{if(!gltf){gltf=await createGLTFLoader().loadAsync(assetUrl(p.model || `WebAssets/Designs/${p.file}`));webModelCache.set(p.file||p.key,gltf);}}
+            let gltf=p.previewScene?{scene:p.previewScene,animations:[]}:webModelCache.get((p.file||p.key).toLowerCase());
+            try{if(!gltf){gltf=await createGLTFLoader().loadAsync(assetUrl(p.model || `WebAssets/Designs/${p.file}`));webModelCache.set((p.file||p.key).toLowerCase(),gltf);}}
             catch{if(sequence===productLoadSequence)container.innerHTML='<p class="store-note">The model could not load. Check that WebAssets is beside this HTML.</p>';return;}
             if(sequence!==productLoadSequence||!isPaused||storeView!=='product')return;
             const view=productScene(gltf);const r=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.toneMapping=THREE.ACESFilmicToneMapping;r.outputColorSpace=THREE.SRGBColorSpace;
@@ -3929,7 +3911,7 @@ const StoreCore = (() => {
             const mixer=gltf.animations?.length?new THREE.AnimationMixer(view.model):null;gltf.animations?.forEach(clip=>mixer?.clipAction(clip).play());
             productViewer={renderer:r,orbit,observer,frame:0};let last=performance.now();
             const draw=now=>{if(!productViewer||productViewer.renderer!==r)return;productViewer.frame=requestAnimationFrame(draw);if(now-last<33)return;const delta=Math.min((now-last)/1000,.1);last=now;orbit.update();mixer?.update(delta);r.render(view.scene,camera3d);};productViewer.frame=requestAnimationFrame(draw);
-            document.getElementById('show-product-photo').classList.remove('selected');document.getElementById('show-product-3d').classList.add('selected');document.getElementById('product-media-note').textContent='Drag to rotate · Scroll or pinch to zoom';
+            document.getElementById('show-product-photo').classList.remove('selected');document.getElementById('show-product-3d').classList.add('selected');document.getElementById('product-media-note').textContent='Drag to rotate · Pinch to zoom';
         }
         function disposeProductViewer(){if(productViewer){cancelAnimationFrame(productViewer.frame);productViewer.observer.disconnect();productViewer.orbit.dispose();productViewer.renderer.dispose();productViewer.renderer.forceContextLoss();productViewer=null;}}
 
@@ -3937,7 +3919,7 @@ const StoreCore = (() => {
         const beatController=createBeatController(scene,()=>audioCtx,musicAudio);
         let atelier=null;
         const atelierReady=new Promise(resolve=>setTimeout(resolve,1600)).then(()=>createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
-          registerProduct(data){const p=storeProducts.find(p=>p.url===data.url);if(p&&!p.previewScene)p.previewScene=data.previewScene;},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
+          registerProduct(data){},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
           isScenePaused:()=>isPaused,cinemaCursor(active){scene.userData.cinemaCursor=active;},
           setModal(open){isCatalogOpen=open;isPaused=open;stopPlayerMomentum();hideMovePrompt();if(open)controls.unlock();},
           travel(position,target){initAudio();if(audioCtx?.state==='suspended')audioCtx.resume();isPaused=false;isCatalogOpen=false;isReceptionOpen=false;stopPlayerMomentum();pauseMenu?.classList.remove('visible');if(blocker)blocker.style.display='none';hideMovePrompt();camera.position.fromArray(position);camera.lookAt(...target);document.body.classList.add('game-active');if(!isTouchMode)safeLockControls();}

@@ -1,15 +1,5 @@
 [
   {
-    "id": "01-signature-tee",
-    "title": "Signature T-shirt",
-    "kind": "tee",
-    "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/01-signature.webp",
-    "model": "Designs/NewCollection/01-signature-tee.glb",
-    "url": "https://ipuiflii.com/products/ipu-iflii-logo-center",
-    "source": "--(1).png"
-  },
-  {
     "id": "01-signature-hoodie",
     "title": "Signature Hoodie",
     "kind": "hoodie",
@@ -17,7 +7,8 @@
     "image": "WebAssets/NewCollection/01-signature.webp",
     "model": "Designs/NewCollection/01-signature-hoodie.glb",
     "url": "https://ipuiflii.com/products/hoodie-logo-of-ipu-iflii",
-    "source": "--(1).png"
+    "source": "--(1).png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/01-signature-hoodie.webp"
   },
   {
     "id": "02-triple-pegasus-tee",
@@ -37,7 +28,8 @@
     "image": "WebAssets/NewCollection/02-triple-pegasus.webp",
     "model": "Designs/NewCollection/02-triple-pegasus-hoodie.glb",
     "url": "https://ipuiflii.com/products/ipu-iflii-pegasus-hoodie",
-    "source": "123123123-copy.png"
+    "source": "123123123-copy.png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/02-triple-pegasus-hoodie.webp"
   },
   {
     "id": "03-triple-pegasus-ivory-tee",
@@ -57,14 +49,15 @@
     "image": "WebAssets/NewCollection/03-triple-pegasus-ivory.webp",
     "model": "Designs/NewCollection/03-triple-pegasus-ivory-hoodie.glb",
     "url": "https://ipuiflii.com/products/ipu-iflii-pegasus-hoodie",
-    "source": "123123123.png"
+    "source": "123123123.png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/03-triple-pegasus-ivory-hoodie.webp"
   },
   {
     "id": "04-timeless-tee",
     "title": "Timeless T-shirt",
     "kind": "tee",
     "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/04-timeless.webp",
+    "image": "WebAssets/NewCollection/04-timeless-tee-raised.webp",
     "model": "Designs/NewCollection/04-timeless-tee.glb",
     "url": "https://ipuiflii.com/products/ipu-iflii-logo-tee",
     "source": "417637702-embroidery_chest_center.png"
@@ -77,74 +70,15 @@
     "image": "WebAssets/NewCollection/04-timeless.webp",
     "model": "Designs/NewCollection/04-timeless-hoodie.glb",
     "url": "https://ipuiflii.com/products/timeless-hoodie",
-    "source": "417637702-embroidery_chest_center.png"
-  },
-  {
-    "id": "05-pegasus-signature-tee",
-    "title": "Pegasus Signature T-shirt",
-    "kind": "tee",
-    "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/05-pegasus-signature.webp",
-    "model": "Designs/NewCollection/05-pegasus-signature-tee.glb",
-    "url": "https://ipuiflii.com/products/ipu-iflii-logo-t-shirt",
-    "source": "Group 1 copy.png"
-  },
-  {
-    "id": "05-pegasus-signature-hoodie",
-    "title": "Pegasus Signature Hoodie",
-    "kind": "hoodie",
-    "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/05-pegasus-signature.webp",
-    "model": "Designs/NewCollection/05-pegasus-signature-hoodie.glb",
-    "url": "https://ipuiflii.com/products/hoodie-logo-of-ipu-iflii",
-    "source": "Group 1 copy.png"
-  },
-  {
-    "id": "06-pegasus-signature-ivory-tee",
-    "title": "Pegasus Signature Ivory T-shirt",
-    "kind": "tee",
-    "fabric": "Ivory",
-    "image": "WebAssets/NewCollection/06-pegasus-signature-ivory.webp",
-    "model": "Designs/NewCollection/06-pegasus-signature-ivory-tee.glb",
-    "url": "https://ipuiflii.com/products/ipu-iflii-logo-t-shirt",
-    "source": "Group 1.png"
-  },
-  {
-    "id": "06-pegasus-signature-ivory-hoodie",
-    "title": "Pegasus Signature Ivory Hoodie",
-    "kind": "hoodie",
-    "fabric": "Ivory",
-    "image": "WebAssets/NewCollection/06-pegasus-signature-ivory.webp",
-    "model": "Designs/NewCollection/06-pegasus-signature-ivory-hoodie.glb",
-    "url": "https://ipuiflii.com/products/hoodie-logo-of-ipu-iflii",
-    "source": "Group 1.png"
-  },
-  {
-    "id": "07-pegasus-emblem-tee",
-    "title": "Pegasus Emblem T-shirt",
-    "kind": "tee",
-    "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/07-pegasus-emblem.webp",
-    "model": "Designs/NewCollection/07-pegasus-emblem-tee.glb",
-    "url": "https://ipuiflii.com/products/ipu-iflii-logo-tee",
-    "source": "IMG_1877.png"
-  },
-  {
-    "id": "07-pegasus-emblem-hoodie",
-    "title": "Pegasus Emblem Hoodie",
-    "kind": "hoodie",
-    "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/07-pegasus-emblem.webp",
-    "model": "Designs/NewCollection/07-pegasus-emblem-hoodie.glb",
-    "url": "https://ipuiflii.com/products/ipu-iflii-pegasus-hoodie",
-    "source": "IMG_1877.png"
+    "source": "417637702-embroidery_chest_center.png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/04-timeless-hoodie.webp"
   },
   {
     "id": "08-cobalt-ornament-tee",
     "title": "Cobalt Ornament T-shirt",
     "kind": "tee",
     "fabric": "Ivory",
-    "image": "WebAssets/NewCollection/08-cobalt-ornament.webp",
+    "image": "WebAssets/NewCollection/08-cobalt-ornament-tee-raised.webp",
     "model": "Designs/NewCollection/08-cobalt-ornament-tee.glb",
     "url": "https://ipuiflii.com/products/ipu-iflii",
     "source": "Normal-1.png"
@@ -157,14 +91,15 @@
     "image": "WebAssets/NewCollection/08-cobalt-ornament.webp",
     "model": "Designs/NewCollection/08-cobalt-ornament-hoodie.glb",
     "url": "https://ipuiflii.com/products/ornament-ipu-iflii-hoodie",
-    "source": "Normal-1.png"
+    "source": "Normal-1.png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/08-cobalt-ornament-hoodie.webp"
   },
   {
     "id": "09-ivory-ornament-tee",
     "title": "Ivory Ornament T-shirt",
     "kind": "tee",
     "fabric": "Midnight black",
-    "image": "WebAssets/NewCollection/09-ivory-ornament.webp",
+    "image": "WebAssets/NewCollection/09-ivory-ornament-tee-raised.webp",
     "model": "Designs/NewCollection/09-ivory-ornament-tee.glb",
     "url": "https://ipuiflii.com/products/ipu-iflii",
     "source": "Normal-4.png"
@@ -177,6 +112,7 @@
     "image": "WebAssets/NewCollection/09-ivory-ornament.webp",
     "model": "Designs/NewCollection/09-ivory-ornament-hoodie.glb",
     "url": "https://ipuiflii.com/products/ornament-ipu-iflii-hoodie-1",
-    "source": "Normal-4.png"
+    "source": "Normal-4.png",
+    "webPrint": "WebAssets/NewCollection/HoodiePrints/09-ivory-ornament-hoodie.webp"
   }
 ]

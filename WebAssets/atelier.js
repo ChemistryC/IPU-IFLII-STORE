@@ -53,16 +53,23 @@ export async function createAtelier(ctx) {
   const sources={};
   const firstTee=garments.find(g=>g.kind==='tee');if(firstTee)sources.tee=(await loader().loadAsync(firstTee.model)).scene;
   // Reuse the optimized authored hoodie and its conforming print geometry.
-  sources.hoodie=(await loader().loadAsync('Designs/NewCollection/02-triple-pegasus-hoodie.glb')).scene;
+  sources.hoodie=(await loader().loadAsync('WebAssets/Designs/Signature-Hoodie-Web.glb')).scene;
   for(let i=0;i<garments.length;i++){
-    const data=garments[i],x=i%2?-29:29,z=-25-Math.floor(i/2)*7;
+    const data=garments[i],x=i%2?-29:29,z=-25-Math.floor(i/2)*10;
     box(4.5,.65,4.5,x,.325,z,cream,true);box(4.6,.055,4.6,x,.69,z,brass);
     box(4.8,.10,4.8,x,8.6,z,stone);box(3.8,.03,.13,x,8.53,z+.9,glow);
     const caption=label(data.title,x,.38,z+2.30,Math.min(3.5,data.title.length*.15),'#34434d');
     caption.userData={atelierAction:()=>openGarment(data)};interactableModels.push(caption);
     try{
       const model=sources[data.kind].clone(true);model.name=data.title;
-      model.traverse(m=>{if(!m.isMesh)return;m.material=m.material.clone();if(m.name.toLowerCase().includes('conforming')){m.material.map=tex(data.image);m.material.color.set(0xffffff);m.material.needsUpdate=true;}else m.material.color.set(data.fabric==='Ivory'?0xe5dece:0x19212b);});
+      model.traverse(m=>{if(!m.isMesh)return;m.material=m.material.clone();
+        const isPrint=m.name.toLowerCase().includes('conforming') || (data.kind==='hoodie'&&m.material.transparent);
+        if(isPrint){
+          const map=tex(data.webPrint||data.image);
+          if(data.kind==='hoodie')map.flipY=false;
+          m.material.map=map;m.material.color.set(0xffffff);m.material.needsUpdate=true;
+        }else m.material.color.set(data.fabric==='Ivory'?0xffffff:0x19212b);
+      });
 
       const b=new THREE.Box3().setFromObject(model),s=b.getSize(new THREE.Vector3()),center=b.getCenter(new THREE.Vector3());
       const content=new THREE.Group();content.add(model);model.position.sub(new THREE.Vector3(center.x,b.min.y,center.z));
