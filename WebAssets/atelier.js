@@ -46,11 +46,14 @@ export async function createAtelier(ctx) {
   for(const x of [-17,17]){box(2,.50,9,x,.55,-101,cream,true);box(.3,.85,9,x+Math.sign(x)*.85,1.25,-101,stone,true);for(const z of [-105.25,-96.75])box(1.8,.7,.25,x,.8,z,brass,true);}
 
   const fill=new THREE.PointLight(0xffffff,360,44,2);fill.position.set(-8,insideY+12,-40);scene.add(fill);
-  const spots=[];for(const x of [-20,20]){const l=new THREE.SpotLight(0xfff6e8,0,20,.68,.85,1.5);l.position.set(x,insideY+8.4,-25);l.target.position.set(x,insideY+3.3,-25);scene.add(l,l.target);spots.push(l);}
+  const spots=[];for(const x of [-20,20]){const l=new THREE.SpotLight(0xfff6e8,0,20,.68,.85,1.5);l.position.set(x,insideY+8.4,-25);l.target.position.set(x,insideY+3.3,-25);scene.add(l.target);spots.push(l);}
   const meshModels=[];let loaded=0;const failures=[];
   // One shared geometry load; each display has its own lightweight print texture.
   // Standalone GLBs remain available for download without loading all of them into the scene.
-  const sources={};for(const kind of ['tee','hoodie']){const first=garments.find(g=>g.kind===kind);if(first)sources[kind]=(await loader().loadAsync(first.model)).scene;}
+  const sources={};
+  const firstTee=garments.find(g=>g.kind==='tee');if(firstTee)sources.tee=(await loader().loadAsync(firstTee.model)).scene;
+  // Reuse the optimized authored hoodie and its conforming print geometry.
+  sources.hoodie=(await loader().loadAsync('Designs/NewCollection/02-triple-pegasus-hoodie.glb')).scene;
   for(let i=0;i<garments.length;i++){
     const data=garments[i],x=i%2?-29:29,z=-25-Math.floor(i/2)*7;
     box(4.5,.65,4.5,x,.325,z,cream,true);box(4.6,.055,4.6,x,.69,z,brass);
@@ -60,12 +63,13 @@ export async function createAtelier(ctx) {
     try{
       const model=sources[data.kind].clone(true);model.name=data.title;
       model.traverse(m=>{if(!m.isMesh)return;m.material=m.material.clone();if(m.name.toLowerCase().includes('conforming')){m.material.map=tex(data.image);m.material.color.set(0xffffff);m.material.needsUpdate=true;}else m.material.color.set(data.fabric==='Ivory'?0xe5dece:0x19212b);});
+
       const b=new THREE.Box3().setFromObject(model),s=b.getSize(new THREE.Vector3()),center=b.getCenter(new THREE.Vector3());
       const content=new THREE.Group();content.add(model);model.position.sub(new THREE.Vector3(center.x,b.min.y,center.z));
       const scale=Math.min(4.8/s.y,3.4/s.x,3.4/s.z);content.scale.setScalar(scale);
       const holder=new THREE.Group();holder.position.set(x,insideY+1.25,z);holder.rotation.y=i%2?Math.PI/2:-Math.PI/2;holder.add(content);gallery.add(holder);
       model.traverse(m=>{if(!m.isMesh)return;m.castShadow=true;m.receiveShadow=true;m.userData={atelierAction:()=>openGarment(data)};interactableModels.push(m);if(m.material)m.material.side=THREE.DoubleSide;});
-      meshModels.push(holder);loaded++;
+      data.previewScene=model;ctx.registerProduct(data);meshModels.push(holder);loaded++;
     }catch(e){failures.push(data.id);label('Artwork / '+data.title,x,4,z+1.8,5);console.warn('Atelier garment unavailable',data.model,e);}
   }
   // Pegasus artwork replaces the on-wall model photographs.
@@ -111,7 +115,8 @@ export async function createAtelier(ctx) {
     animation.onfinish=()=>{if(modal.hidden)return;spread=next;renderBook();modal.querySelector(delta>0?'[data-next]':'[data-prev]')?.focus();};
   }
 
-  function openGarment(data){window.location.assign(data.url || 'https://ipuiflii.com/');return;enter();activeBook=-1;modal.innerHTML=`<header><div><small>IPU IFLII / ORIGINAL ARCHIVE</small><h2>${data.title}</h2></div><button data-close>Close ×</button></header><div class="atelier-product"><img src="${data.image}" alt="${data.title} artwork"><article><small>FORM & HERITAGE</small><h3>Heritage, in form.</h3><p>${data.title}, from your original IPU IFLII artwork archive.</p><p>${data.fabric} tee · Original 3D garment with a new print.</p><p class="atelier-caption">Collection preview. This concept is not currently listed for purchase.</p><a href="${data.model}" download>Download garment GLB ↓</a><a href="${data.image}" target="_blank" rel="noopener">View artwork ↗</a><button data-book-link>Explore the magazine →</button></article></div>`;modal.querySelector('[data-close]').focus();}
+  function openGarment(data){ctx.openProduct(data);}
+
   const go=dest=>{exit();if(dest==='cinema'){cinema.enter();return;}if(dest==='wardrobe'){travel([-29,insideY+2.9,-97],[-40,insideY+3.2,-99]);return;}const reading=dest==='reading'||dest==='philosophy';travel(dest==='hall'?[0,insideY+2.9,24]:reading?[9,insideY+2.9,-93]:[10,insideY+2.9,-24],dest==='hall'?[0,insideY+3,-10]:reading?[0,insideY+4,-105]:[0,insideY+4,-46]);};
   modal.addEventListener('click',e=>{e.stopPropagation();if(e.target.closest('[data-close]'))exit();if(e.target.closest('[data-next]'))turn(2);if(e.target.closest('[data-prev]'))turn(-2);if(e.target.closest('[data-book-link]'))openBook(1);});
   for(const name of ['mousedown','mouseup','touchstart','touchend','pointerdown'])modal.addEventListener(name,e=>e.stopPropagation());

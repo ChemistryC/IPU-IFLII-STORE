@@ -1,3 +1,4 @@
+import {batchStaticArchitecture} from './WebAssets/performance.js';
 import {currentCatalog} from './WebAssets/shop-catalog.js';
 
         import * as THREE from 'three';
@@ -395,7 +396,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             }
             checkReadyToEnter();
         }
-        const statuesReady=autoLoadHostedStatues();
+        const statuesReady=new Promise(resolve=>setTimeout(()=>autoLoadHostedStatues().then(resolve),1800));
 
         if (statueInput) {
             statueInput.addEventListener('change', async (e) => {
@@ -776,7 +777,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
 
             // Prefer the user's painted sky when it is beside this file in
             // Images/Sky.png. The generated gradient remains as fallback.
-            loadSkyImage('Images/Sky.png', document.getElementById('sky-status'));
+            loadSkyImage('WebAssets/Environment/sky.webp', document.getElementById('sky-status'));
         }
 
         function createHorizonAtmosphere() {
@@ -900,7 +901,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         }
 
         function isCameraInsideTemple() {
-            return camera.position.z < 58 && camera.position.z > -151 && Math.abs(camera.position.x) < 43;
+            return camera.position.z < 62 && camera.position.z > -151 && Math.abs(camera.position.x) < 43;
         }
 
         function playShootingStarSound() {
@@ -1354,7 +1355,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
 
         function openProductPanel(data) {
             const key=Object.keys(PRODUCTS_BY_MODEL).find(k=>PRODUCTS_BY_MODEL[k]===data || PRODUCTS_BY_MODEL[k].title===data.title);
-            window.location.assign(data.url || 'https://ipuiflii.com/');
+            openTempleProduct({...data,key:key || data.title,file:key,images:[data.img].filter(Boolean)});
         }
 
         const raycaster = new THREE.Raycaster();
@@ -2459,28 +2460,28 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         const PRODUCTS_BY_MODEL = {
             "atlas.glb": {
                 title: "IPU IFLII All Fine Design",
-                price: "€30,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-black-front-6a7d0100a9794.png?v=1786577172&width=832",
                 url: "https://ipuiflii.com/products/ipu-iflii-logo-tee",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "pegasus.glb": {
                 title: "Timeless Pegasus",
-                price: "€50,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-white-front-6a7d03d31a42b.jpg?v=1786577896&width=832",
                 url: "https://ipuiflii.com/products/ipu-iflii-pegasus-hoodie",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "timelesszigzag.glb": {
                 title: "Timeless — Zig Zag",
-                price: "€90,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-white-front-6a7d04a9772a4.jpg?v=1786578111&width=832",
                 url: "https://ipuiflii.com/products/zig-zag-t-shirt",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "zigzag.glb": {
                 title: "IPU IFLII Zig Zag Logo",
-                price: "€60,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-maroon-front-6a754f16a5202.png?v=1786072877&width=3840",
                 url: "https://ipuiflii.com/products/zig-zag-logo-t-shirt",
                 description: CLASSIC_TEE_DESCRIPTION
@@ -2489,35 +2490,35 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             // gallery and sends people to the full collection.
             "timelesszigzag2.glb": {
                 title: "IPU IFLII Zig-Zag Emblem",
-                price: "€50,00",
+                price: "",
                 img: "",
                 url: "https://ipuiflii.com/collections/all",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "ipuiflii.glb": {
                 title: "The Unique IFLII",
-                price: "€80,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-white-front-6a7d0384b66ee.png?v=1786577815&width=832",
                 url: "https://ipuiflii.com/products/ipu-iflii",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "ipuifliiclassic.glb": {
                 title: "IPU IFLII Classic",
-                price: "€100,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-white-front-6a7d06da29254.jpg?v=1786578670&width=832",
                 url: "https://ipuiflii.com/products/ipu-iflii-logo-center",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "playyourharp.glb": {
                 title: "Just Play Your Harp",
-                price: "€30,00",
+                price: "",
                 img: CDN + "unisex-classic-tee-white-front-6a7550c20ce4d.png?v=1786073306&width=832",
                 url: "https://ipuiflii.com/products/just-play-your-harp?variant=58786201993561",
                 description: CLASSIC_TEE_DESCRIPTION
             },
             "ipuifliihercues.glb": {
                 title: "Oversized IPU IFLII T-Shirt",
-                price: "€60,00",
+                price: "",
                 img: CDN + "mens-oversized-faded-t-shirt-faded-black-front-6a75509c8c943.png?v=1786073264&width=832",
                 url: "https://ipuiflii.com/products/ipu-iflii-logo-t-shirt",
                 description: OVERSIZED_TEE_DESCRIPTION
@@ -3004,7 +3005,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
 
         // Hosted pages can fetch the sibling Designs folder automatically.
         // A file:// page must receive explicit folder permission from the user.
-        setTimeout(autoLocateShirtModels, 500);
+        setTimeout(autoLocateShirtModels, 2400);
 
         const collidableBoxes = [];
         function rebuildCollisionBoxes() {
@@ -3488,6 +3489,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         function animate() {
             requestAnimationFrame(animate);
             const time = performance.now();
+            if(document.hidden){prevTime=time;return;}
             updateDaylight(time);
             beatController.update(Math.min((time-prevTime)/1000,.05));
             if(document.hidden || isPaused){if(!document.hidden){atelier?.update(Math.min((time-prevTime)/1000,.05));renderer.render(scene,camera);}prevTime=time;webFrames=0;webFrameStart=time;return;}
@@ -3525,7 +3527,16 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             }
             atelier?.update(frameDelta);
             updateGrandFountain(time*.001);
-            if(isCameraInsideTemple()){windAudio.volume=0;poolAudio.volume=0;for(const a of activeStarSounds)a.pause();activeStarSounds.clear();}
+            const insideTempleNow=isCameraInsideTemple();
+            if(insideTempleNow){
+                windAudio.volume=0;poolAudio.volume=0;
+                if(!windAudio.paused)windAudio.pause();
+                if(!poolAudio.paused)poolAudio.pause();
+                for(const a of activeStarSounds)a.pause();activeStarSounds.clear();
+            } else if(isAudioInit) {
+                if(windAudio.paused)windAudio.play().catch(()=>{});
+                if(poolAudio.paused)poolAudio.play().catch(()=>{});
+            }
             
             updateShootingStar(time);
 
@@ -3555,7 +3566,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 }
 
                 if (musicAudio) {
-                    const insideShop = camera.position.z < 58 && camera.position.z > -151 && Math.abs(camera.position.x) < 43;
+                    const insideShop = insideTempleNow;
                     const entranceDistance = Math.hypot(camera.position.x, Math.max(0, camera.position.z - 58));
                     const outdoorReach = 18;
                     const proximity = insideShop ? 1 : Math.max(0, 1 - entranceDistance / outdoorReach);
@@ -3575,8 +3586,10 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                     const targetPool = 0.24 * poolProximity * (1 - smoothProximity);
                     const targetWind = 0.18 * (1 - smoothProximity) * (1 - poolProximity * 0.72);
 
-                    windAudio.volume += (targetWind - windAudio.volume) * 0.04;
-                    poolAudio.volume += (targetPool - poolAudio.volume) * 0.04;
+                    if(!insideTempleNow){
+                        windAudio.volume += (targetWind - windAudio.volume) * 0.04;
+                        poolAudio.volume += (targetPool - poolAudio.volume) * 0.04;
+                    }
                     musicAudio.volume = THREE.MathUtils.damp(musicAudio.volume,targetMusic,.75,delta);
                     if(camera.position.z<-119 && musicAudio.volume<.004 && !musicAudio.paused)musicAudio.pause();
 
@@ -3683,7 +3696,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
                 const fps=webFrames*1000/(time-webFrameStart);
                 renderer.domElement.dataset.fps=fps.toFixed(1);
                 slowWindows=fps<28?slowWindows+1:0;
-                if(graphicsChoice==='auto' && slowWindows>=2 && renderPixelRatio>.65){renderPixelRatio=Math.max(.65,renderPixelRatio-.15);renderer.setPixelRatio(renderPixelRatio);scene.userData.qualityTier="lite";slowWindows=0;}
+                if(['auto','low'].includes(graphicsChoice) && slowWindows>=2 && renderPixelRatio>.65){renderPixelRatio=Math.max(.65,renderPixelRatio-.15);renderer.setPixelRatio(renderPixelRatio);scene.userData.qualityTier="lite";slowWindows=0;}
                 renderer.domElement.dataset.quality=scene.userData.qualityTier;
                 renderer.domElement.dataset.drawCalls=String(renderer.info.render.calls);
                 renderer.domElement.dataset.triangles=String(renderer.info.render.triangles);
@@ -3721,6 +3734,13 @@ const StoreCore = (() => {
 
         // ---- One catalogue for the walk-through, reception and 2D shop ----
         const storeProducts = currentCatalog;
+        for(const [file,data] of Object.entries(PRODUCTS_BY_MODEL)){data.price='';const product=storeProducts.find(p=>p.url===data.url);if(product)product.file=file;}
+        function openTempleProduct(data){
+            const linked=storeProducts.find(p=>p.url===data.url);
+            const key=data.id || data.key || data.title;
+            const p={...linked,...data,key,images:linked?.images?.length?linked.images:(data.images||[data.image].filter(Boolean)),description:data.description||'',options:[],variants:[]};
+            storeProductMap.set(key,p);openPauseMenu();openStoreProduct(key);
+        }
         const storeProductMap = new Map(storeProducts.map(p=>[p.key,p]));
         let storeView='browse', storeQuery='', storeSort='featured', activeStoreProduct=null;
         let chosenOptions={}, productViewer=null, productLoadSequence=0;
@@ -3760,19 +3780,19 @@ const StoreCore = (() => {
             disposeProductViewer(); productLoadSequence++; storeView=view;
             document.querySelector('.store-shell').scrollTop=0;
             document.querySelectorAll('[data-store-view]').forEach(el=>el.setAttribute('aria-current',String(el.dataset.storeView===view)));
-            if(view==='graphics') renderGraphics(); else if(view==='bag') renderBag(); else if(view==='reception') renderStoreReception(); else if(view==='lookbook') renderLookbook(); else renderStoreBrowse();
+            if(view==='graphics') renderGraphics(); else if(view==='bag') renderStoreBrowse(); else if(view==='reception') renderStoreReception(); else if(view==='lookbook') renderLookbook(); else renderStoreBrowse();
             if(focus) storeContent.querySelector('h1')?.focus({preventScroll:true});
         }
         function storeCard(p) {
             const src=imageFor(p);
             return `<button class="product-card" type="button" data-product="${escHTML(p.key)}" aria-label="View ${escHTML(p.title)}">
                 <span class="card-image">${src?`<img src="${escHTML(src)}" alt="${escHTML(p.title)}" loading="lazy" decoding="async" data-product-image="${escHTML(p.key)}">`:`<span class="card-fallback">IPU IFLII</span>`}<span class="card-tag">${p.thumbnail?'3D garment':'THE COLLECTION'}</span></span>
-                <h3>${escHTML(p.title)}</h3><p>${p.price?money(p.price):'Discover the piece'}${p.live?'':' <span aria-label="guide price">·</span>'}</p></button>`;
+                <h3>${escHTML(p.title)}</h3><p>Discover the piece</p></button>`;
         }
         function filteredProducts(){let items=storeProducts.filter(p=>(p.title+' '+p.key).toLowerCase().includes(storeQuery.toLowerCase()));if(storeSort==='price-low')items.sort((a,b)=>a.price-b.price);if(storeSort==='price-high')items.sort((a,b)=>b.price-a.price);return items;}
         function updateStoreGrid(){const items=filteredProducts();const grid=document.getElementById('store-grid');if(grid)grid.innerHTML=items.length?items.map(storeCard).join(''):'<div class="store-empty">No pieces match your search. Try another name.</div>';const count=document.getElementById('store-result-count');if(count)count.textContent=`${items.length} ${items.length===1?'piece':'pieces'}`;}
         function renderStoreBrowse(){
-            storeContent.innerHTML=`<div class="store-intro"><div><p class="store-kicker">IPU IFLII · The temple collection</p><h1 tabindex="-1">Find your timeless piece.</h1><p>Explore the garments, choose your fit, make them yours.</p></div><label class="store-search"><span class="store-kicker">Search the collection</span><input id="store-search" type="search" placeholder="Pegasus, Zig Zag, classic…" value="${escHTML(storeQuery)}" autocomplete="off"></label></div><div class="store-tools"><span id="store-result-count"></span><select id="store-sort" aria-label="Sort products"><option value="featured">Featured</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option></select></div><div class="store-grid" id="store-grid"></div><p class="store-note">Prices and availability are confirmed with the store before checkout.</p>`;
+            storeContent.innerHTML=`<div class="store-intro"><div><p class="store-kicker">IPU IFLII · The temple collection</p><h1 tabindex="-1">Find your timeless piece.</h1><p>Explore the garments, choose your fit, make them yours.</p></div><label class="store-search"><span class="store-kicker">Search the collection</span><input id="store-search" type="search" placeholder="Pegasus, Zig Zag, classic…" value="${escHTML(storeQuery)}" autocomplete="off"></label></div><div class="store-tools"><span id="store-result-count"></span><select id="store-sort" aria-label="Sort products"><option value="featured">Featured</option></select></div><div class="store-grid" id="store-grid"></div><p class="store-note">Explore a piece, then visit IPUIFLII.com to buy.</p>`;
             document.getElementById('store-sort').value=storeSort;updateStoreGrid();
             document.getElementById('store-search').addEventListener('input',e=>{storeQuery=e.target.value;updateStoreGrid();});
             document.getElementById('store-sort').addEventListener('change',e=>{storeSort=e.target.value;updateStoreGrid();});
@@ -3792,24 +3812,19 @@ const StoreCore = (() => {
             const add=document.getElementById('store-add');add.disabled=Boolean(p.live&&variant&&!variant.available)||!p.handle;
             if(!p.handle)document.getElementById('detail-stock').textContent='This piece is not available to order from the temple yet.';
         }
-        async function openStoreProduct(key,initialChoices=null) {
-            window.location.assign(storeProductMap.get(key)?.url || 'https://ipuiflii.com/'); return;
+        async function openStoreProduct(key) {
             const p=storeProductMap.get(key);if(!p)return;
             document.querySelector('.store-shell').scrollTop=0;
-            disposeProductViewer();storeView='product';activeStoreProduct=p;chosenOptions=initialChoices?{...initialChoices}:{};
-            const sequence=++productLoadSequence;
-            storeContent.innerHTML=`<button class="store-link" data-store-view="browse">← Back to collection</button><div class="store-detail"><div><div class="product-media" id="product-media"></div><div class="media-actions"><button type="button" id="show-product-photo" class="selected">Images</button><button type="button" id="show-product-3d">View in 3D</button></div><div class="media-thumbs" id="product-thumbnails"></div><p class="store-note" id="product-media-note">Product photographs and your original 3D garment.</p></div><div class="product-info"><p class="store-kicker">IPU IFLII · Timeless</p><h1 tabindex="-1">${escHTML(p.title)}</h1><div class="price" id="detail-price">${money(p.price)}</div><div id="product-options"></div><p class="store-note" id="detail-stock"></p><button class="store-primary" id="store-add">Add to bag</button><button class="store-secondary" data-store-view="bag">View bag</button><button class="store-secondary" id="find-garment">Find in temple ↗</button><p class="store-error" id="detail-error" role="status"></p><details open><summary>About this piece</summary>${p.description}</details><details><summary>Fit &amp; sizing</summary><p>Select your size above. For exact garment measurements, consult the size guide on this piece’s store page.</p><a class="store-link" href="${escHTML(p.url)}" target="_blank" rel="noopener">Open product &amp; size guide ↗</a></details><details><summary>Delivery &amp; returns</summary><p>Shipping, taxes, available payment methods and the current return policy are shown at secure store checkout.</p></details></div></div>`;
-            renderProductOptions();showProductImage(p);renderProductThumbnails(p);
+            disposeProductViewer();storeView='product';activeStoreProduct=p;++productLoadSequence;
+            storeContent.innerHTML=`<button class="store-link" data-store-view="browse">← Back to collection</button><div class="store-detail"><div><div class="product-media" id="product-media"></div><div class="media-actions"><button type="button" id="show-product-photo" class="selected">Images</button>${p.file||p.model||p.previewScene?'<button type="button" id="show-product-3d">View in 3D</button>':''}</div><div class="media-thumbs" id="product-thumbnails"></div><p class="store-note" id="product-media-note"></p></div><div class="product-info"><p class="store-kicker">IPU IFLII · Timeless</p><h1 tabindex="-1">${escHTML(p.title)}</h1><a class="store-primary" id="store-buy" href="https://ipuiflii.com/">Buy on IPUIFLII.com ↗</a><p class="store-note">Choose your size and colour in the store.</p>${p.description?`<details open><summary>About this piece</summary>${p.description}</details>`:''}</div></div>`;
+            showProductImage(p);renderProductThumbnails(p);
             document.getElementById('show-product-photo').onclick=()=>showProductImage(p);
-            document.getElementById('show-product-3d').onclick=()=>startProductViewer(p);
-            document.getElementById('find-garment').onclick=()=>{const slot=shirtDisplaySlots.find(x=>x.fileName.toLowerCase()===p.key);if(slot){camera.position.set(Math.sign(slot.group.position.x)*13,insideY+2.9,slot.group.position.z+2);camera.lookAt(slot.group.position.x,insideY+3.1,slot.group.position.z);closePauseMenu();}};
-            document.getElementById('store-add').onclick=()=>addActiveProductToBag();
+            const viewButton=document.getElementById('show-product-3d');if(viewButton)viewButton.onclick=()=>startProductViewer(p);
             storeContent.querySelector('h1').focus({preventScroll:true});
-            try{await refreshProduct(p);if(sequence===productLoadSequence&&storeView==='product'){renderProductOptions();renderProductThumbnails(p);if(!productViewer)showProductImage(p);}}catch(e){if(sequence===productLoadSequence)renderProductOptions();}
         }
         function renderProductThumbnails(p){const el=document.getElementById('product-thumbnails');if(!el)return;el.innerHTML=p.images.map((src,i)=>`<button type="button" data-gallery-index="${i}" aria-label="Product image ${i+1}"><img src="${escHTML(src)}" alt="${escHTML(p.title)} — view ${i+1}" loading="lazy"></button>`).join('');}
         function showProductImage(p,index=0){
-            disposeProductViewer();const el=document.getElementById('product-media');if(!el)return;
+            disposeProductViewer();++productLoadSequence;const el=document.getElementById('product-media');if(!el)return;
             const src=!p.imageFailed&&p.images[index]?p.images[index]:p.thumbnail;
             el.innerHTML=src?`<img src="${escHTML(src)}" alt="${escHTML(p.title)}" id="detail-image">`:'<p class="store-note">Preparing your garment preview…</p>';
             const img=el.querySelector('img');if(img)img.onerror=()=>{if(p.thumbnail&&img.src!==p.thumbnail){img.src=p.thumbnail;p.imageFailed=true;}else{el.innerHTML='<p class="store-note">Select View in 3D to explore this piece.</p>';}};
@@ -3846,7 +3861,7 @@ const StoreCore = (() => {
             finally{if(button.isConnected){button.disabled=false;button.textContent='Continue to secure checkout ↗';}}
         }
         function renderStoreReception(){
-            storeContent.innerHTML=`<p class="store-kicker">At your service</p><h1 tabindex="-1">Welcome to reception.</h1><div class="reception-layout"><section class="reception-welcome"><h2>Find something that feels like you.</h2><p>Explore the collection, inspect a garment in 3D, or return to the marble hall. Your bag follows you between both views.</p><label class="store-search"><input id="reception-search" type="search" placeholder="Search garments…" aria-label="Search from reception"></label><button class="store-primary" id="reception-find" style="margin-top:12px">Find a piece</button><button class="store-secondary" data-store-view="bag">View your bag</button><button class="store-secondary" id="visit-reception-3d">Visit reception in 3D ↗</button></section><section class="reception-faq"><details open><summary>Choosing your size</summary><p>Open a piece to choose its size and colour. The available options come from its store listing. Exact measurements are linked from each product’s size guide.</p></details><details><summary>How purchasing works</summary><p>Add your selected pieces to the bag. We confirm the current options and prices, then open IPU IFLII’s secure checkout to complete your order.</p></details><details><summary>Product &amp; on-body imagery</summary><p>Every product gallery includes the photographs available from the store. You can also rotate and zoom the actual 3D garment.</p></details><details><summary>Music in the temple</summary><p>Your Timeless music and the fountain and wind sounds play after you enter. You can mute or resume the music below.</p></details><details><summary>Contact the store</summary><p>For custom pieces, sizing assistance or an existing order, visit <a href="${STORE_URL}" target="_blank" rel="noopener">IPU IFLII ↗</a>.</p></details></section></div>`;
+            storeContent.innerHTML=`<p class="store-kicker">At your service</p><h1 tabindex="-1">Welcome to reception.</h1><div class="reception-layout"><section class="reception-welcome"><h2>Find something that feels like you.</h2><p>Explore the collection, inspect a garment in 3D, or return to the marble hall. Buy your favourite piece on IPUIFLII.com.</p><label class="store-search"><input id="reception-search" type="search" placeholder="Search garments…" aria-label="Search from reception"></label><button class="store-primary" id="reception-find" style="margin-top:12px">Find a piece</button><button class="store-secondary" id="visit-reception-3d">Visit reception in 3D ↗</button></section><section class="reception-faq"><details open><summary>Choosing your size</summary><p>Open a piece to choose its size and colour. The available options come from its store listing. Exact measurements are linked from each product’s size guide.</p></details><details><summary>How purchasing works</summary><p>Open a product preview and select Buy to visit IPUIFLII.com and complete your order.</p></details><details><summary>Product &amp; on-body imagery</summary><p>Every product gallery includes the photographs available from the store. You can also rotate and zoom the actual 3D garment.</p></details><details><summary>Music in the temple</summary><p>Your Timeless music and the fountain and wind sounds play after you enter. You can mute or resume the music below.</p></details><details><summary>Contact the store</summary><p>For custom pieces, sizing assistance or an existing order, visit <a href="${STORE_URL}" target="_blank" rel="noopener">IPU IFLII ↗</a>.</p></details></section></div>`;
             const search=()=>{storeQuery=document.getElementById('reception-search').value;showStore('browse');};document.getElementById('reception-find').onclick=search;document.getElementById('reception-search').onkeydown=e=>{if(e.key==='Enter')search();};
         }
         const lookNames=['Midnight blue','Emerald','Everyday green','Champagne','In motion','Up close'];
@@ -3879,14 +3894,14 @@ const StoreCore = (() => {
         shopOpen.addEventListener('click',e=>{e.stopPropagation();openPauseMenu();});
 
         function productScene(gltf){
-            const result=new THREE.Scene();result.background=new THREE.Color(0xe8e7df);result.environment=scene.environment;
+            const result=new THREE.Scene();result.background=new THREE.Color(0xffffff);result.environment=scene.environment;
             const model=cloneSkeleton(gltf.scene);const box=new THREE.Box3().setFromObject(model);const size=box.getSize(new THREE.Vector3());const center=box.getCenter(new THREE.Vector3());
             const wrapper=new THREE.Group();model.position.sub(center);wrapper.add(model);wrapper.scale.setScalar(3.1/Math.max(size.x,size.y,size.z));result.add(wrapper);
             result.add(new THREE.HemisphereLight(0xffffff,0x888573,2.0));const key=new THREE.DirectionalLight(0xffefdb,3);key.position.set(3,5,5);result.add(key);const fill=new THREE.DirectionalLight(0xc0d5ed,1.6);fill.position.set(-4,1,2);result.add(fill);
             return {scene:result,model,wrapper};
         }
         const thumbnailQueue=[];let thumbnailBusy=false;
-        function queueModelThumbnail(key,gltf){thumbnailQueue.push({key,gltf});if(!thumbnailBusy){thumbnailBusy=true;setTimeout(renderNextThumbnail,120);}}
+        function queueModelThumbnail(key,gltf){if(!storeProductMap.has(key))return;thumbnailQueue.push({key,gltf});if(!thumbnailBusy){thumbnailBusy=true;setTimeout(renderNextThumbnail,120);}}
         function renderNextThumbnail(){
             const item=thumbnailQueue.shift();if(!item){thumbnailBusy=false;return;}
             try{
@@ -3901,9 +3916,9 @@ const StoreCore = (() => {
             setTimeout(renderNextThumbnail,180);
         }
         async function startProductViewer(p){
-            disposeProductViewer();const sequence=productLoadSequence;const container=document.getElementById('product-media');container.innerHTML='<p class="store-note">Loading your 3D garment…</p>';
-            let gltf=webModelCache.get(p.key);
-            try{if(!gltf){gltf=await createGLTFLoader().loadAsync(assetUrl(`WebAssets/Designs/${p.file}`));webModelCache.set(p.key,gltf);}}
+            disposeProductViewer();const sequence=++productLoadSequence;const container=document.getElementById('product-media');container.innerHTML='<p class="store-note">Loading your 3D garment…</p>';
+            let gltf=p.previewScene?{scene:p.previewScene,animations:[]}:webModelCache.get(p.file||p.key);
+            try{if(!gltf){gltf=await createGLTFLoader().loadAsync(assetUrl(p.model || `WebAssets/Designs/${p.file}`));webModelCache.set(p.file||p.key,gltf);}}
             catch{if(sequence===productLoadSequence)container.innerHTML='<p class="store-note">The model could not load. Check that WebAssets is beside this HTML.</p>';return;}
             if(sequence!==productLoadSequence||!isPaused||storeView!=='product')return;
             const view=productScene(gltf);const r=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'low-power'});r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.toneMapping=THREE.ACESFilmicToneMapping;r.outputColorSpace=THREE.SRGBColorSpace;
@@ -3921,22 +3936,26 @@ const StoreCore = (() => {
 
         const beatController=createBeatController(scene,()=>audioCtx,musicAudio);
         let atelier=null;
-        const atelierReady=createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
-          loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
+        const atelierReady=new Promise(resolve=>setTimeout(resolve,1600)).then(()=>createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
+          registerProduct(data){const p=storeProducts.find(p=>p.url===data.url);if(p&&!p.previewScene)p.previewScene=data.previewScene;},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
           isScenePaused:()=>isPaused,cinemaCursor(active){scene.userData.cinemaCursor=active;},
           setModal(open){isCatalogOpen=open;isPaused=open;stopPlayerMomentum();hideMovePrompt();if(open)controls.unlock();},
           travel(position,target){initAudio();if(audioCtx?.state==='suspended')audioCtx.resume();isPaused=false;isCatalogOpen=false;isReceptionOpen=false;stopPlayerMomentum();pauseMenu?.classList.remove('visible');if(blocker)blocker.style.display='none';hideMovePrompt();camera.position.fromArray(position);camera.lookAt(...target);document.body.classList.add('game-active');if(!isTouchMode)safeLockControls();}
-        }).then(value=>{atelier=value;return value;}).catch(error=>{console.error('After Hours could not load',error);const notice=document.createElement('div');notice.className='atelier-ui';notice.style.cssText='position:fixed;right:20px;top:90px;z-index:90;background:#151515;color:white;padding:16px';notice.textContent='After Hours could not load. Refresh to try again.';document.body.append(notice);});
+        })).then(value=>{atelier=value;return value;}).catch(error=>{console.error('After Hours could not load',error);const notice=document.createElement('div');notice.className='atelier-ui';notice.style.cssText='position:fixed;right:20px;top:90px;z-index:90;background:#151515;color:white;padding:16px';notice.textContent='After Hours could not load. Refresh to try again.';document.body.append(notice);});
         // Inspection hooks for local QA; no checkout or account actions.
         window.templeInspection={beat:()=>beatController.stats(),music:musicAudio,ambience:{wind:windAudio,pool:poolAudio},groundHeightAt,ready:atelierReady,stats:()=>({...atelier?.stats(),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,position:camera.position.toArray()}),visit:dest=>atelier?.visit(dest),read:i=>atelier?.openBook(i),close:()=>atelier?.close(),scene,camera,renderer};
 
-        // Prepare the fixed light layout once instead of recompiling while statues arrive.
-        Promise.allSettled([atelierReady,statuesReady]).then(async()=>{
-            scene.userData.storeLighting=createStoreLighting(scene,renderer,insideY);
-            scene.userData.storeLighting.setQuality(scene.userData.qualityTier);
+        // Show the entrance immediately. The heavier rear rooms, statues and
+        // contact shadows finish in the background while the visitor can move.
+        scene.userData.storeLighting=createStoreLighting(scene,renderer,insideY);
+        scene.userData.storeLighting.setQuality(scene.userData.qualityTier);
+        scene.userData.architectureBatch=batchStaticArchitecture(scene,interactableModels);
+        document.documentElement.dataset.renderReady='true';prevTime=performance.now();animate();
+        requestAnimationFrame(()=>requestAnimationFrame(hideLoadingScreen));
+        Promise.allSettled([atelierReady,statuesReady]).then(()=>{
             scene.userData.contactShadows=addSoftContacts(scene,insideY,COURTYARD_Y,shirtDisplaySlots);
-            try{await renderer.compileAsync(scene,camera);}catch(e){console.warn('Shader preparation',e);}
-            document.documentElement.dataset.renderReady='true';prevTime=performance.now();animate();hideLoadingScreen();
+            renderer.shadowMap.needsUpdate=true;
+            document.documentElement.dataset.fullExperienceReady='true';
         });
 
         window.addEventListener('resize', () => {

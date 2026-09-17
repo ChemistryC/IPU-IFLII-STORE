@@ -324,6 +324,11 @@ body:has(#pause-menu.visible) {cursor:auto!important;}
 
     #pause-menu.visible{z-index:80}
 @media(max-width:650px){.store-header{flex-wrap:wrap}.store-nav{flex-wrap:wrap;gap:12px}}
+.product-card .card-image,.product-media,.media-thumbs button,.media-thumbs img {background:#fff;}
+#store-buy {display:block;text-align:center;text-decoration:none;margin-top:28px;}
+.store-detail > div {min-width:0;}
+.product-media {width:100%;min-height:0;aspect-ratio:auto;height:clamp(260px,48vh,520px);}
+.product-media > img,.product-media > .viewer-canvas {position:absolute;inset:0;width:100%;height:100%;}
 </style>
 
 
@@ -393,7 +398,7 @@ body:has(#pause-menu.visible) {cursor:auto!important;}
     <div id="pause-menu" role="dialog" aria-modal="true" aria-label="IPU IFLII store">
       <div class="store-shell">
         <header class="store-header"><button class="store-brand" data-store-view="browse"><img src="Images/Logo.png" alt="">IPU IFLII</button>
-          <nav class="store-nav" aria-label="Store"><button data-store-view="browse">Collection</button><button data-store-view="lookbook">Lookbook</button><button data-store-view="reception">Reception</button><button data-store-view="graphics">Graphics</button><button data-store-view="bag">Bag (<span data-bag-count>0</span>)</button></nav>
+          <nav class="store-nav" aria-label="Store"><button data-store-view="browse">Collection</button><button data-store-view="lookbook">Lookbook</button><button data-store-view="reception">Reception</button><button data-store-view="graphics">Graphics</button></nav>
           <button class="store-return" id="resume-btn" type="button">Return to temple ↗</button>
         </header>
         <main class="store-content" id="store-content"></main>
