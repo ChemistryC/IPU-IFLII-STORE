@@ -1,3 +1,6 @@
+import {trackStartupAssets,prepareFirstEntry} from './WebAssets/startup.js';
+const waitForStartupAssets=trackStartupAssets();
+let startupPrepared=false;
 import {batchStaticArchitecture} from './WebAssets/performance.js';
 import {currentCatalog} from './WebAssets/shop-catalog.js';
 
@@ -396,7 +399,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
             }
             checkReadyToEnter();
         }
-        const statuesReady=new Promise(resolve=>setTimeout(()=>autoLoadHostedStatues().then(resolve),1800));
+        const statuesReady=Promise.resolve().then(autoLoadHostedStatues);
 
         if (statueInput) {
             statueInput.addEventListener('change', async (e) => {
@@ -3007,7 +3010,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
 
         // Hosted pages can fetch the sibling Designs folder automatically.
         // A file:// page must receive explicit folder permission from the user.
-        setTimeout(autoLocateShirtModels, 2400);
+        const shirtsReady=Promise.resolve().then(autoLocateShirtModels);
 
         const collidableBoxes = [];
         function rebuildCollisionBoxes() {
@@ -3472,7 +3475,7 @@ import { marbleMaterial, createBeatController } from './WebAssets/marble.js';
         function animate() {
             requestAnimationFrame(animate);
             const time = performance.now();
-            if(document.hidden){prevTime=time;return;}
+            if(document.hidden||!startupPrepared){prevTime=time;return;}
             updateDaylight(time);
             beatController.update(Math.min((time-prevTime)/1000,.05));
             if(document.hidden || isPaused){if(!document.hidden){atelier?.update(Math.min((time-prevTime)/1000,.05));renderer.render(scene,camera);}prevTime=time;webFrames=0;webFrameStart=time;return;}
@@ -3918,7 +3921,7 @@ const StoreCore = (() => {
 
         const beatController=createBeatController(scene,()=>audioCtx,musicAudio);
         let atelier=null;
-        const atelierReady=new Promise(resolve=>setTimeout(resolve,1600)).then(()=>createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
+        const atelierReady=Promise.resolve().then(()=>createAtelier({scene,camera,renderer,insideY,createBox,collisionMeshes,interactableModels,
           registerProduct(data){},openProduct:openTempleProduct,loader:createGLTFLoader,rebuildCollisions:rebuildCollisionBoxes,beatController,musicAudio,
           isScenePaused:()=>isPaused,cinemaCursor(active){scene.userData.cinemaCursor=active;},
           setModal(open){isCatalogOpen=open;isPaused=open;stopPlayerMomentum();hideMovePrompt();if(open)controls.unlock();},
@@ -3927,18 +3930,22 @@ const StoreCore = (() => {
         // Inspection hooks for local QA; no checkout or account actions.
         window.templeInspection={beat:()=>beatController.stats(),music:musicAudio,ambience:{wind:windAudio,pool:poolAudio},groundHeightAt,ready:atelierReady,stats:()=>({...atelier?.stats(),calls:renderer.info.render.calls,triangles:renderer.info.render.triangles,position:camera.position.toArray()}),visit:dest=>atelier?.visit(dest),read:i=>atelier?.openBook(i),close:()=>atelier?.close(),scene,camera,renderer};
 
-        // Show the entrance immediately. The heavier rear rooms, statues and
-        // contact shadows finish in the background while the visitor can move.
+        // Prepare the scene before movement begins, keeping the original loader design.
         scene.userData.storeLighting=createStoreLighting(scene,renderer,insideY);
         scene.userData.storeLighting.setQuality(scene.userData.qualityTier);
         scene.userData.architectureBatch=batchStaticArchitecture(scene,interactableModels);
         document.documentElement.dataset.renderReady='true';prevTime=performance.now();animate();
-        requestAnimationFrame(()=>requestAnimationFrame(hideLoadingScreen));
-        Promise.allSettled([atelierReady,statuesReady]).then(()=>{
+        Promise.allSettled([atelierReady,statuesReady,shirtsReady]).then(async results=>{
             scene.userData.contactShadows=addSoftContacts(scene,insideY,COURTYARD_Y,shirtDisplaySlots);
             renderer.shadowMap.needsUpdate=true;
+            await waitForStartupAssets();
+            atelier?.update(0);
+            try{scene.userData.startupWarmup=await prepareFirstEntry(renderer,scene,camera,insideY);}
+            catch(error){console.warn('Startup preparation fallback',error);}
             document.documentElement.dataset.fullExperienceReady='true';
-        });
+            startupPrepared=true;prevTime=performance.now();
+            requestAnimationFrame(()=>requestAnimationFrame(hideLoadingScreen));
+        }).catch(error=>{console.error('Startup preparation failed',error);startupPrepared=true;prevTime=performance.now();hideLoadingScreen();});
 
         window.addEventListener('resize', () => {
             const aspect = window.innerWidth / Math.max(1, window.innerHeight);
